@@ -1,14 +1,14 @@
 from flask_restplus import Api
 
-from .auth import api as ns1
-from .accomodation import api as ns2
+from .auth import api as auth
+from .user import api as user
 
 api = Api(
-    title='My Title',
-    version='1.0',
-    description='A description',
+    title='Uni-Learn API',
+    version='2.0',
+    description='An API backend'
     # All API metadatas
 )
 
-api.add_namespace(ns1)
-api.add_namespace(ns2)
+api.add_namespace(auth)
+api.add_namespace(user)
