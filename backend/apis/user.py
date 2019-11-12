@@ -17,17 +17,14 @@ class User(Resource):
     ''')
     def put(self):
         user = authorize(request)
-        (password, email, phone_number) = unpack(request.json, 'password', 'email', 'phone_number', required=False)
-        print(password)
-        print(email)
-        print(phone_number)
-        if password == None and email == None and phone_number == None:
+        (password, email, role) = unpack(request.json, 'password', 'email', 'role', required=False)
+        if password == None and email == None and role == None:
             abort(400, 'Malformed Request')
         if password != None and password == '':
             abort(400, 'Malformed Request')
         if email != None and email == '':
             abort(400, 'Malformed Request')
-        if phone_number != None and phone_number == '':
+        if role != None and role == '':
             abort(400, 'Malformed Request')
         session = db.get_session()
         user = session.query(db.User).filter_by(token = user.token).first()
@@ -36,8 +33,8 @@ class User(Resource):
             user.password = password
         if email != None:
             user.email = email
-        if phone_number != None:
-            user.phone_number = phone_number
+        if role != None:
+            user.role = role
         session.commit()
         session.close()
         return {
@@ -53,11 +50,10 @@ class User(Resource):
         user = authorize(request)
         return {
             "id": user.id,
-            'username': user.username,
+            'zid': user.zid,
             'password': user.password,
             'token': user.token,
             'role': user.role,
             'name': user.name,
-            'email': user.email,
-            'phone_number': user.phone_number
+            'email': user.email
         }

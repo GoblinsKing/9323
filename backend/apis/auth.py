@@ -2,6 +2,7 @@ from flask_restplus import Namespace, Resource, fields, abort
 from flask import request
 from util.helper import *
 import db.init_db as db
+from util.models import login_details
 
 api = Namespace('auth', description='Authentication Services')
 
@@ -10,7 +11,7 @@ class Login(Resource):
     @api.response(200, 'Success')
     @api.response(400, 'Missing Username/Password')
     @api.response(403, 'Invalid Username/Password')
-    @api.expect(login_details)
+    @api.expect(login_details(api))
     @api.doc(description='''
         This is used to authenticate a verified account created through signup.
         Returns a auth token which should be passed in subsequent calls to the api

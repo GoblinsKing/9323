@@ -150,7 +150,7 @@ def init_db():
     Session = sessionmaker(engine)
     session = Session()
     init_user(session)
-    admin = User(zid='z5100000', password='admin', role='admin', name='Admin', email='admin@goThere.con', token='123')
+    admin = User(zid='z5000000', password='admin', role='admin', name='Admin', email='admin@goThere.con', token='123')
     session.add(admin)
     session.commit()
     session.close()
