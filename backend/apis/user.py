@@ -57,3 +57,20 @@ class User(Resource):
             'name': user.name,
             'email': user.email
         }
+
+@api.route('/enrolment')
+class Enrolment(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.expect(auth_details(api))
+    @api.doc(description='''Get the user enrolment''')
+    def get(self):
+        user = authorize(request)
+        session = db.get_session()
+        enrolments = session.query(db.Enrolment).filter_by(student_id = user.id).all()
+        session.close()
+        enrolmentList = []
+        for enrolment in enrolments:
+            enrolmentList.append(getEnrolmentInfo(enrolment))
+        return enrolmentList

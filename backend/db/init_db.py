@@ -154,6 +154,7 @@ def init_db():
     init_user(session)
     init_course(session)
     init_chatRoom(session)
+    init_enrolment(session)
     # finish init
     session.close()
 
@@ -176,9 +177,7 @@ def init_course(session):
         for line in f.readlines():
             line = line.strip().split(',')
             course = Course(code=line[0], title=line[1])
-            
             session.add(course)
-            
     session.commit()
 
 def init_chatRoom(session):
@@ -186,4 +185,12 @@ def init_chatRoom(session):
     for course in courses:
         chatRoom = ChatRoom(course_id=course.id, title='public')
         session.add(chatRoom)
+    session.commit()
+
+def init_enrolment(session):
+    with open('db/enrolment.csv') as f:
+        for line in f.readlines():
+            line = line.strip().split(',')
+            enrolment = Enrolment(student_id=line[0], course_id=line[1], term=line[2])
+            session.add(enrolment)
     session.commit()

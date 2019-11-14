@@ -23,7 +23,15 @@ def getMessageInfo(raw):
             "id": raw.id,
             'user_id': raw.user_id,
             'message': raw.message
-        }
+    }
+
+def getEnrolmentInfo(raw):
+    return{
+            "id": raw.id,
+            'student_id': raw.student_id,
+            'course_id': raw.course_id,
+            'term': raw.term
+    }
 
 def authorize(request):
     t = request.headers.get('Authorization', None)
