@@ -7,7 +7,7 @@ from util.models import message_details, auth_details
 api = Namespace('chat', description='Online Chat Services')
 
 @api.route('/chat')
-class Login(Resource):
+class Chat(Resource):
     @api.response(200, 'Success')
     @api.response(400, 'Missing Username/Password')
     @api.response(403, 'Invalid Username/Password')
@@ -43,3 +43,27 @@ class Login(Resource):
         for message in messages:
             messageList.append(getMessageInfo(message))
         return messageList
+
+@api.route('/chatroom')
+class Chatroom(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.expect(auth_details(api))
+    @api.param('course_id', 'the id of the course which the user want to fetch')
+    @api.param('channel', 'the channel which the user want to fetch(must be either "public" or "group")')
+    @api.doc(description='''Get chat room id''')
+    def get(self):
+        authorize(request)
+        course_id = int(request.args.get('course_id', None))
+        channel = request.args.get('channel', None)
+        if (channel != "public" and channel != "group"):
+            abort(400, "Wrong channel request")
+        session = db.get_session()
+        chatroom = session.query(db.ChatRoom).filter_by(course_id=course_id).filter_by(channel=channel).first()
+        session.close()
+        if (chatroom is None):
+            return None
+        return{
+            'chat_room_id': chatroom.id
+        }

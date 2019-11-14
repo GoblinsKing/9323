@@ -90,7 +90,7 @@ class ChatRoom(Base):
                         Base.metadata,
                         Column('id', Integer, primary_key=True),
                         Column('course_id', Integer),
-                        Column('title', VARCHAR(20)))
+                        Column('channel', VARCHAR(20)))
     def __repr__(self):
         return 'This is ChatRoom table'
 
@@ -183,7 +183,7 @@ def init_course(session):
 def init_chatRoom(session):
     courses = session.query(Course)
     for course in courses:
-        chatRoom = ChatRoom(course_id=course.id, title='public')
+        chatRoom = ChatRoom(course_id=course.id, channel='public')
         session.add(chatRoom)
     session.commit()
 
