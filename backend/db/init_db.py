@@ -24,7 +24,8 @@ class Course(Base):
     __table__ = Table('Course',
                         Base.metadata,
                         Column('id', Integer, primary_key=True),
-                        Column('title', VARCHAR(20)))
+                        Column('code', VARCHAR(8)),
+                        Column('title', VARCHAR(50)))
 
     def __repr__(self):
         return 'Course:\nTitle: %s' % (self.title)
@@ -99,7 +100,7 @@ class Message(Base):
                         Base.metadata,
                         Column('id', Integer, primary_key=True),
                         Column('chat_room_id', Integer),
-                        Column('user_zid', Integer),
+                        Column('user_id', Integer),
                         Column('message', TEXT))
     def __repr__(self):
         return 'This is Message table'
@@ -149,10 +150,11 @@ def init_db():
 
     Session = sessionmaker(engine)
     session = Session()
+    # init dataBase
     init_user(session)
-    admin = User(zid='z5000000', password='admin', role='admin', name='Admin', email='admin@goThere.con', token='123')
-    session.add(admin)
-    session.commit()
+    init_course(session)
+    init_chatRoom(session)
+    # finish init
     session.close()
 
 def get_session():
@@ -163,8 +165,25 @@ def init_user(session):
     with open('db/users.csv') as f:
         for line in f.readlines():
             line = line.strip().split(',')
-            #e = f"{user['username']}@unsw.edu.au"
-            #print(line)
             user = User(zid=line[0], password=line[1], token='', role=line[2], name=line[3], email='email@gg.com')
+            if (user.role == "admin"):
+                user.token = '123'
             session.add(user)
+    session.commit()
+
+def init_course(session):
+    with open('db/course.csv') as f:
+        for line in f.readlines():
+            line = line.strip().split(',')
+            course = Course(code=line[0], title=line[1])
+            
+            session.add(course)
+            
+    session.commit()
+
+def init_chatRoom(session):
+    courses = session.query(Course)
+    for course in courses:
+        chatRoom = ChatRoom(course_id=course.id, title='public')
+        session.add(chatRoom)
     session.commit()

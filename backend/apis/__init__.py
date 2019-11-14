@@ -2,6 +2,7 @@ from flask_restplus import Api
 
 from .auth import api as auth
 from .user import api as user
+from .message import api as message
 
 api = Api(
     title='Uni-Learn API',
@@ -12,3 +13,4 @@ api = Api(
 
 api.add_namespace(auth)
 api.add_namespace(user)
+api.add_namespace(message)

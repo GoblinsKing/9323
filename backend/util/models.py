@@ -15,3 +15,9 @@ def login_details(api):
     'zid': fields.String(required=True, example='z5100000'),
     'password': fields.String(required=True, example='eantio'),
     })
+
+def message_details(api):
+    return api.model('message_details', {
+    'chat_room_id': fields.Integer(required=True, example='1'),
+    'message': fields.String(required=True, example='Hello World')
+    })

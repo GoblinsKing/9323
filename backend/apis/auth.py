@@ -1,4 +1,4 @@
-from flask_restplus import Namespace, Resource, fields, abort
+from flask_restplus import Namespace, Resource, abort
 from flask import request
 from util.helper import *
 import db.init_db as db
