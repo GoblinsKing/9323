@@ -6,7 +6,7 @@ from util.models import message_details, auth_details
 
 api = Namespace('chat', description='Online Chat Services')
 
-@api.route('/chat')
+@api.route('/message')
 class Chat(Resource):
     @api.response(200, 'Success')
     @api.response(400, 'Missing Username/Password')

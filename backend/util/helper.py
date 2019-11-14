@@ -33,6 +33,13 @@ def getEnrolmentInfo(raw):
             'term': raw.term
     }
 
+def getCourseInfo(raw):
+    return{
+            "id": raw.id,
+            'code': raw.code,
+            'title': raw.title
+    }
+
 def authorize(request):
     t = request.headers.get('Authorization', None)
     if not t:
