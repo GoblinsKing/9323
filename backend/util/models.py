@@ -21,3 +21,12 @@ def message_details(api):
     'chat_room_id': fields.Integer(required=True, example='1'),
     'message': fields.String(required=True, example='Hello World')
     })
+
+def create_group_details(api):
+    return api.model('create_group_details', {
+    'assignment_id': fields.Integer(required=True, example='1'),
+    'title': fields.String(required=True, example='Best Group'),
+    'topic': fields.String(required=True, example='Learning management system'),
+    'backend_skill': fields.Integer(required=True, example='3'),
+    'frontend_skill': fields.Integer(required=True, example='2')
+    })

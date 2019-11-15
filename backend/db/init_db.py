@@ -109,14 +109,14 @@ class Group(Base):
     __table__ = Table('Group',
                         Base.metadata,
                         Column('id', Integer, primary_key=True),
-                        Column('course_id', Integer),
+                        Column('assignment_id', Integer),
                         Column('leader_id', Integer),
                         Column('title', VARCHAR(20)),
-                        Column('topic_id', Integer),
+                        Column('topic', VARCHAR(80)),
                         Column('num_member', Integer),
                         Column('num_backend', Integer),
-                        Column('num_frontend', Integer),
-                        Column('softskill', Integer))
+                        Column('num_frontend', Integer))#,
+                        #Column('softskill', Integer))
     def __repr__(self):
         return 'This is Group table'
 

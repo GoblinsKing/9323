@@ -4,6 +4,7 @@ from .auth import api as auth
 from .user import api as user
 from .chat import api as chat
 from .course import api as course
+from .group import api as group
 
 api = Api(
     title='Uni-Learn API',
@@ -16,3 +17,4 @@ api.add_namespace(auth)
 api.add_namespace(user)
 api.add_namespace(chat)
 api.add_namespace(course)
+api.add_namespace(group)

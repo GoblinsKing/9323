@@ -40,6 +40,18 @@ def getCourseInfo(raw):
             'title': raw.title
     }
 
+def getGroupInfo(raw):
+    return{
+            "id": raw.id,
+            'assignment_id': raw.assignment_id,
+            'leader_id': raw.leader_id,
+            "title": raw.title,
+            'topic': raw.topic,
+            'num_member': raw.num_member,
+            "num_backend": raw.num_backend,
+            'num_frontend': raw.num_frontend
+    }
+
 def authorize(request):
     t = request.headers.get('Authorization', None)
     if not t:
