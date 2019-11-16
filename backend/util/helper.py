@@ -49,7 +49,8 @@ def getGroupInfo(raw):
             'topic': raw.topic,
             'num_member': raw.num_member,
             "num_backend": raw.num_backend,
-            'num_frontend': raw.num_frontend
+            'num_frontend': raw.num_frontend,
+            'members': raw.members
     }
 
 def getAssignmentInfo(raw):

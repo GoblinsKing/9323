@@ -9,8 +9,8 @@ api = Namespace('course', description='Course Services')
 @api.route('/')
 class Course(Resource):
     @api.response(200, 'Success')
-    @api.response(400, 'Missing Username/Password')
-    @api.response(403, 'Invalid Username/Password')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
     @api.param('course_id', 'the id of the course which the user want to fetch')
     @api.doc(description='''
         Get course information
@@ -27,8 +27,8 @@ class Course(Resource):
 @api.route('/assignment')
 class Assignment(Resource):
     @api.response(200, 'Success')
-    @api.response(400, 'Missing Username/Password')
-    @api.response(403, 'Invalid Username/Password')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
     @api.expect(auth_details(api), assignment_details(api))
     @api.doc(description='''
         Post a new assignment.<br>
@@ -47,8 +47,8 @@ class Assignment(Resource):
         }
 
     @api.response(200, 'Success')
-    @api.response(400, 'Missing Username/Password')
-    @api.response(403, 'Invalid Username/Password')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
     @api.expect(auth_details(api))
     @api.param('course_id', 'the id of the course which the user want to fetch')
     @api.doc(description='''

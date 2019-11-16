@@ -29,11 +29,11 @@ class Group(Resource):
 @api.route('/create')
 class CreateGroup(Resource):
     @api.response(200, 'Success')
-    @api.response(400, 'Missing Username/Password')
-    @api.response(403, 'Invalid Username/Password')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
     @api.expect(auth_details(api), create_group_details(api))
     @api.doc(description='''
-        User can create a group
+        User can create a group<br>
         The skill level is indicated by an integer, 3 means advanced level and 1 means beginner level
     ''')
     def post(self):
@@ -48,8 +48,42 @@ class CreateGroup(Resource):
             num_backend = 1
         else:
             num_frontend = 1
-        new_group = db.Group(assignment_id=assignment_id, leader_id=user.id, title=title, topic=topic, num_member=1, num_backend=num_backend, num_frontend=num_frontend)
+        new_group = db.Group(assignment_id=assignment_id, leader_id=user.id, title=title, topic=topic, num_member=1, num_backend=num_backend, num_frontend=num_frontend, members=user.id)
         session.add(new_group)
+        session.commit()
+        session.close()
+        return {
+            'message': 'success'
+        }
+
+@api.route('/join')
+class CreateGroup(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.expect(auth_details(api))
+    @api.param('group_id', 'the id of the group which the user want to join')
+    @api.param('skill', 'the skill which the user has<br>skill must be either "backend" or "frontend"')
+    @api.doc(description='''
+        User can join an existing group
+    ''')
+    def post(self):
+        user = authorize(request)
+        group_id = int(request.args.get('group_id', None))
+        skill = request.args.get('skill', None)
+        if (skill != 'backend' and skill != 'frontend'):
+            abort(400, "Wrong skill input")
+        session = db.get_session()
+        group = session.query(db.Group).filter_by(id=group_id).first()
+        if (group is None):
+            abort(400, "Group is not exist")
+        group.num_member += 1
+        if (skill == 'backend'):
+            group.num_backend += 1
+        else:
+            group.num_frontend += 1
+        group.members += "|"
+        group.members += str(user.id)
         session.commit()
         session.close()
         return {
