@@ -30,3 +30,13 @@ def create_group_details(api):
     'backend_skill': fields.Integer(required=True, example='3'),
     'frontend_skill': fields.Integer(required=True, example='2')
     })
+
+def assignment_details(api):
+    return api.model('assignment_details', {
+    'course_id': fields.Integer(required=True, example='1'),
+    'title': fields.String(required=True, example='Group Project'),
+    'due_date': fields.String(required=True, example='2019-11-30'),
+    'group_size': fields.Integer(required=True, example='4'),
+    'all_topics': fields.Integer(required=True, example='Project-based learning Management App|Peer review App'),
+    'content': fields.String(required=True, example='You need to develop an app')
+    })

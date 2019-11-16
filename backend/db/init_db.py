@@ -135,7 +135,7 @@ class Assignment(Base):
                         Base.metadata,
                         Column('id', Integer, primary_key=True),
                         Column('course_id', Integer),
-                        Column('title', VARCHAR(20)),
+                        Column('title', VARCHAR(50)),
                         Column('due_date', VARCHAR(20)),
                         Column('group_size', Integer),
                         Column('all_topics', TEXT),

@@ -52,6 +52,17 @@ def getGroupInfo(raw):
             'num_frontend': raw.num_frontend
     }
 
+def getAssignmentInfo(raw):
+    return{
+            "id": raw.id,
+            'course_id': raw.course_id,
+            'title': raw.title,
+            "due_date": raw.due_date,
+            'group_size': raw.group_size,
+            'all_topics': raw.all_topics,
+            "content": raw.content
+    }
+
 def authorize(request):
     t = request.headers.get('Authorization', None)
     if not t:
