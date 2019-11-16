@@ -57,7 +57,7 @@ class CreateGroup(Resource):
         }
 
 @api.route('/join')
-class CreateGroup(Resource):
+class JoinGroup(Resource):
     @api.response(200, 'Success')
     @api.response(400, 'Missing Arguments')
     @api.response(403, 'Invalid Auth Token')
@@ -86,6 +86,22 @@ class CreateGroup(Resource):
         group.members += str(user.id)
         session.commit()
         session.close()
+        return {
+            'message': 'success'
+        }
+
+@api.route('/match')
+class MatchGroup(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.expect(auth_details(api))
+    @api.doc(description='''
+        User can match the group which is best for him
+    ''')
+    def post(self):
+        user = authorize(request)
+        
         return {
             'message': 'success'
         }
