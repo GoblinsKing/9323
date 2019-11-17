@@ -56,3 +56,11 @@ def notice_details(api):
     'content': fields.String(required=True, example='This quiz will due next week'),
     'publisher_id': fields.Integer(required=True, example='1')
     })
+
+def resource_details(api):
+    return api.model('resource_details', {
+    'course_id': fields.Integer(required=True, example='1'),
+    'title': fields.String(required=True, example='Week3 Lecture Note'),
+    'group': fields.String(required=True, example='Week3'),
+    'content': fields.String(required=True, example='This is a note.')
+    })

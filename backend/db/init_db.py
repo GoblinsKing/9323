@@ -55,10 +55,8 @@ class Resource(Base):
                         Base.metadata,
                         Column('id', Integer, primary_key=True),
                         Column('course_id', Integer),
-                        Column('title', VARCHAR(20)),
-                        #Column('publish_time', VARCHAR(20)),
-                        Column('publisher_id', Integer),
-                        #Column('due_date', VARCHAR(20)),
+                        Column('title', VARCHAR(40)),
+                        Column('group', VARCHAR(20)),
                         Column('content', TEXT))
     def __repr__(self):
         return 'This is Resource table'

@@ -80,6 +80,15 @@ def getGroupMebmerInfo(raw):
             "role": raw.role
     }
 
+def getResourceInfo(raw):
+    return{
+            "id": raw.id,
+            'course_id': raw.course_id,
+            'title': raw.title,
+            'group': raw.group,
+            'content': raw.content
+    }
+
 def authorize(request):
     t = request.headers.get('Authorization', None)
     if not t:

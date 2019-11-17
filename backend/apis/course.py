@@ -2,7 +2,7 @@ from flask_restplus import Namespace, Resource, abort
 from flask import request
 from util.helper import *
 import db.init_db as db
-from util.models import assignment_details, auth_details, notice_details
+from util.models import assignment_details, auth_details, notice_details, resource_details
 
 api = Namespace('course', description='Course Services')
 
@@ -106,3 +106,40 @@ class Notice(Resource):
         for notice in notices:
             noticeList.append(getNoticeInfo(notice))
         return noticeList
+
+@api.route('/resource')
+class Resource(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.expect(auth_details(api), resource_details(api))
+    @api.doc(description='''
+        Post a new Resource.
+    ''')
+    def post(self):
+        authorize(request)
+        (course_id, title, group, content) = unpack(request.json, 'course_id', 'title', 'group', 'content')
+        session = db.get_session()
+        new_resource = db.Resource(course_id=course_id, title=title, content=content, group=group)
+        session.add(new_resource)
+        session.commit()
+        session.close()
+        return {
+            'message': 'success'
+        }
+
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.param('resource_id', 'the id of the resource which the user want to fetch')
+    @api.doc(description='''
+        Get the resource
+    ''')
+    def get(self):
+        resource_id = int(request.args.get('resource_id', None))
+        session = db.get_session()
+        resource = session.query(db.Resource).filter_by(id=resource_id).first()
+        session.close()
+        if (resource is None):
+            return None
+        return getResourceInfo(resource)
