@@ -2,7 +2,7 @@ from flask_restplus import Namespace, Resource, abort
 from flask import request
 from util.helper import *
 import db.init_db as db
-from util.models import create_group_details, auth_details
+from util.models import create_group_details, auth_details, group_match_details
 
 api = Namespace('group', description='Group Services')
 
@@ -44,20 +44,26 @@ class CreateGroup(Resource):
         num_frontend = 0
         if (backend_skill == frontend_skill):
             num_backend = 1
+            skill = 'backend'
         elif (backend_skill > frontend_skill):
             num_backend = 1
+            skill = 'backend'
         else:
             num_frontend = 1
-        new_group = db.Group(assignment_id=assignment_id, leader_id=user.id, title=title, topic=topic, num_member=1, num_backend=num_backend, num_frontend=num_frontend, members=user.id)
+            skill = 'frontend'
+        new_group = db.Group(assignment_id=assignment_id, leader_id=user.id, title=title, topic=topic, num_member=1, num_backend=num_backend, num_frontend=num_frontend)
         session.add(new_group)
+        session.commit()
+        new_member = db.GroupMember(group_id=new_group.id, student_id=user.id, role=skill)
+        session.add(new_member)
         session.commit()
         session.close()
         return {
             'message': 'success'
         }
 
-@api.route('/join')
-class JoinGroup(Resource):
+@api.route('/member')
+class GroupMember(Resource):
     @api.response(200, 'Success')
     @api.response(400, 'Missing Arguments')
     @api.response(403, 'Invalid Auth Token')
@@ -82,28 +88,83 @@ class JoinGroup(Resource):
             group.num_backend += 1
         else:
             group.num_frontend += 1
-        group.members += "|"
-        group.members += str(user.id)
+        #group.members += "|"
+        #group.members += str(user.id)
+        new_member = db.GroupMember(group_id=group.id, student_id=user.id, role=skill)
+        session.add(new_member)
         session.commit()
         session.close()
         return {
             'message': 'success'
         }
 
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.expect(auth_details(api))
+    @api.param('group_id', 'the id of the group which the user want to check')
+    @api.doc(description='''Get all group member info''')
+    def get(self):
+        authorize(request)
+        group_id = int(request.args.get('group_id', None))
+        session = db.get_session()
+        members = session.query(db.GroupMember).filter_by(group_id=group_id).all()
+        session.close()
+        if (members is None):
+            return None
+        memberList = []
+        for member in members:
+            memberList.append(getGroupMebmerInfo(member))
+        return memberList
+
 @api.route('/match')
 class MatchGroup(Resource):
     @api.response(200, 'Success')
     @api.response(400, 'Missing Arguments')
     @api.response(403, 'Invalid Auth Token')
-    @api.expect(auth_details(api))
+    @api.expect(auth_details(api), group_match_details(api))
     @api.doc(description='''
         User can match the group which is best for him
     ''')
     def post(self):
         user = authorize(request)
-        
+        (assignment_id, topic, backend_skill, frontend_skill) = unpack(request.json, 'assignment_id', 'topic', 'backend_skill', 'frontend_skill')
+        session = db.get_session()
+        if (backend_skill >= frontend_skill):
+            skill = 'backend'
+        else:
+            skill = 'frontend'
+        groups = session.query(db.Group).filter_by(assignment_id=assignment_id, topic=topic).all()
+        assignment = session.query(db.Assignment).filter_by(id=assignment_id).first()
+        if (assignment is None):
+            abort(400, "Assignment does not exist")
+        group_size = assignment.group_size
+        found = False
+        for group in groups:
+            if (group.num_member == group_size):
+                continue
+            if (skill == 'backend'):
+                if (group.num_frontend >= group.num_backend):
+                    found = True
+                    group.num_backend += 1
+                    break
+            if (skill == 'frontend'):
+                if (group.num_frontend <= group.num_backend):
+                    found = True
+                    group.num_frontend += 1
+                    break
+        if (not found):
+            return {
+                'message': 'Sorry, we cannot find a group for you. You can create a new group.'
+            }
+        new_member = db.GroupMember(group_id=group.id, student_id=user.id, role=skill)
+        session.add(new_member)
+        group.num_member += 1
+        session.commit()
+        group_id = group.id
+        session.close()
         return {
-            'message': 'success'
+            'group_id': group_id
         }
 
 @api.route('/all')
@@ -136,14 +197,19 @@ class LeaveGroup(Resource):
     @api.param('group_id', 'the id of the group which the user want to leave')
     @api.doc(description='''The user can leave the current group''')
     def get(self):
-        authorize(request)
+        user = authorize(request)
         group_id = int(request.args.get('group_id', None))
         session = db.get_session()
-        #groups = session.query(db.Group).filter_by(assignment_id=assignment_id).all()
+        group = session.query(db.Group).filter_by(id=group_id).first()
+        groupMember = session.query(db.GroupMember).filter_by(student_id=user.id).first()
+        group.num_member -= 1
+        if (groupMember.role == 'backend'):
+            group.num_backend -= 1
+        else:
+            group.num_frontend -= 1
+        session.commit()
+        session.delete(groupMember)
         session.close()
-        #if (groups is None):
-        #    return None
-        groupList = []
-        #for group in groups:
-        #    groupList.append(getGroupInfo(group))
-        return groupList
+        return {
+            'message': 'success'
+        }

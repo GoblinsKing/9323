@@ -115,13 +115,12 @@ class Group(Base):
                         Column('topic', VARCHAR(80)),
                         Column('num_member', Integer),
                         Column('num_backend', Integer),
-                        Column('num_frontend', Integer),
-                        Column('members', VARCHAR(20)))
+                        Column('num_frontend', Integer))
+                        #Column('members', VARCHAR(20)))
                         #Column('softskill', Integer))
     def __repr__(self):
         return 'This is Group table'
 
-'''
 class GroupMember(Base):
     __table__ = Table('GroupMember',
                         Base.metadata,
@@ -131,7 +130,6 @@ class GroupMember(Base):
                         Column('role', VARCHAR(20)))
     def __repr__(self):
         return 'This is GroupMember table'
-'''
 
 class Assignment(Base):
     __table__ = Table('Assignment',

@@ -31,6 +31,14 @@ def create_group_details(api):
     'frontend_skill': fields.Integer(required=True, example='2')
     })
 
+def group_match_details(api):
+    return api.model('group_match_details', {
+    'assignment_id': fields.Integer(required=True, example='1'),
+    'topic': fields.String(required=True, example='Learning management system'),
+    'backend_skill': fields.Integer(required=True, example='3'),
+    'frontend_skill': fields.Integer(required=True, example='2')
+    })
+
 def assignment_details(api):
     return api.model('assignment_details', {
     'course_id': fields.Integer(required=True, example='1'),

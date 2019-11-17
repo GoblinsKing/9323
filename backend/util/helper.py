@@ -49,8 +49,7 @@ def getGroupInfo(raw):
             'topic': raw.topic,
             'num_member': raw.num_member,
             "num_backend": raw.num_backend,
-            'num_frontend': raw.num_frontend,
-            'members': raw.members
+            'num_frontend': raw.num_frontend
     }
 
 def getAssignmentInfo(raw):
@@ -71,6 +70,14 @@ def getNoticeInfo(raw):
             'title': raw.title,
             "content": raw.content,
             'publisher_id': raw.publisher_id
+    }
+
+def getGroupMebmerInfo(raw):
+    return{
+            "id": raw.id,
+            'group_id': raw.group_id,
+            'student_id': raw.student_id,
+            "role": raw.role
     }
 
 def authorize(request):
