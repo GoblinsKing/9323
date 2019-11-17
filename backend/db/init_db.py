@@ -146,6 +146,17 @@ class Assignment(Base):
     def __repr__(self):
         return 'This is Assignment table'
 
+class Notice(Base):
+    __table__ = Table('Notice',
+                        Base.metadata,
+                        Column('id', Integer, primary_key=True),
+                        Column('course_id', Integer),
+                        Column('title', VARCHAR(50)),
+                        Column('content', TEXT),
+                        Column('publisher_id', Integer))
+    def __repr__(self):
+        return 'This is Notice table'
+
 
 def init_db():
     Base.metadata.drop_all(engine)

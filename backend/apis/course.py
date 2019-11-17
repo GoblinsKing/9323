@@ -2,7 +2,7 @@ from flask_restplus import Namespace, Resource, abort
 from flask import request
 from util.helper import *
 import db.init_db as db
-from util.models import assignment_details, auth_details
+from util.models import assignment_details, auth_details, notice_details
 
 api = Namespace('course', description='Course Services')
 
@@ -34,7 +34,7 @@ class Assignment(Resource):
         Post a new assignment.<br>
         The toptics are separated by '|'
     ''')
-    def put(self):
+    def post(self):
         authorize(request)
         (course_id, title, due_date, group_size, all_topics, content) = unpack(request.json, 'course_id', 'title', 'due_date', 'group_size', 'all_topics', 'content')
         session = db.get_session()
@@ -66,3 +66,43 @@ class Assignment(Resource):
         return {
             'assignmentInfo': getAssignmentInfo(assignment)
         }
+
+@api.route('/notice')
+class Notice(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.expect(auth_details(api), notice_details(api))
+    @api.doc(description='''
+        Post a new notice.
+    ''')
+    def post(self):
+        authorize(request)
+        (course_id, title, content, publisher_id) = unpack(request.json, 'course_id', 'title', 'content', 'publisher_id')
+        session = db.get_session()
+        new_notice = db.Notice(course_id=course_id, title=title, content=content, publisher_id=publisher_id)
+        session.add(new_notice)
+        session.commit()
+        session.close()
+        return {
+            'message': 'success'
+        }
+
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.param('course_id', 'the id of the course which the user want to fetch')
+    @api.doc(description='''
+        Get the notice information of a course<br>
+    ''')
+    def get(self):
+        course_id = int(request.args.get('course_id', None))
+        session = db.get_session()
+        notices = session.query(db.Notice).filter_by(course_id=course_id).all()
+        session.close()
+        if (notices is None):
+            return None
+        noticeList = []
+        for notice in notices:
+            noticeList.append(getNoticeInfo(notice))
+        return noticeList

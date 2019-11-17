@@ -40,3 +40,11 @@ def assignment_details(api):
     'all_topics': fields.Integer(required=True, example='Project-based learning Management App|Peer review App'),
     'content': fields.String(required=True, example='You need to develop an app')
     })
+
+def notice_details(api):
+    return api.model('notice_details', {
+    'course_id': fields.Integer(required=True, example='1'),
+    'title': fields.String(required=True, example='You can start quiz2 now'),
+    'content': fields.String(required=True, example='This quiz will due next week'),
+    'publisher_id': fields.Integer(required=True, example='1')
+    })

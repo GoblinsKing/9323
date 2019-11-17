@@ -105,3 +105,45 @@ class MatchGroup(Resource):
         return {
             'message': 'success'
         }
+
+@api.route('/all')
+class AllGroup(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.expect(auth_details(api))
+    @api.param('assignment_id', 'the id of the assignment which the user want to fetch')
+    @api.doc(description='''Get all group info by assignment''')
+    def get(self):
+        authorize(request)
+        assignment_id = int(request.args.get('assignment_id', None))
+        session = db.get_session()
+        groups = session.query(db.Group).filter_by(assignment_id=assignment_id).all()
+        session.close()
+        if (groups is None):
+            return None
+        groupList = []
+        for group in groups:
+            groupList.append(getGroupInfo(group))
+        return groupList
+
+@api.route('/leave')
+class LeaveGroup(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.expect(auth_details(api))
+    @api.param('group_id', 'the id of the group which the user want to leave')
+    @api.doc(description='''The user can leave the current group''')
+    def get(self):
+        authorize(request)
+        group_id = int(request.args.get('group_id', None))
+        session = db.get_session()
+        #groups = session.query(db.Group).filter_by(assignment_id=assignment_id).all()
+        session.close()
+        #if (groups is None):
+        #    return None
+        groupList = []
+        #for group in groups:
+        #    groupList.append(getGroupInfo(group))
+        return groupList

@@ -62,6 +62,15 @@ def getAssignmentInfo(raw):
             'group_size': raw.group_size,
             'all_topics': raw.all_topics,
             "content": raw.content
+    }    
+
+def getNoticeInfo(raw):
+    return{
+            "id": raw.id,
+            'course_id': raw.course_id,
+            'title': raw.title,
+            "content": raw.content,
+            'publisher_id': raw.publisher_id
     }
 
 def authorize(request):
