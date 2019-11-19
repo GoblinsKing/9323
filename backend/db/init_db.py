@@ -77,7 +77,7 @@ class Comment(Base):
     __table__ = Table('Comment',
                         Base.metadata,
                         Column('id', Integer, primary_key=True),
-                        #Column('publish_time', VARCHAR(20)),
+                        Column('thread_id', Integer),
                         Column('publisher_id', Integer),
                         Column('content', TEXT))
     def __repr__(self):

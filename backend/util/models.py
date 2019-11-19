@@ -64,3 +64,17 @@ def resource_details(api):
     'group': fields.String(required=True, example='Week3'),
     'content': fields.String(required=True, example='This is a note.')
     })
+
+def thread_details(api):
+    return api.model('thread_details', {
+    'course_id': fields.Integer(required=True, example='1'),
+    'title': fields.String(required=True, example='Do we need to submit the code?'),
+    'content': fields.String(required=True, example='Or we only need to submit the report?')
+    })
+
+def comment_details(api):
+    return api.model('comment_details', {
+    'thread_id': fields.Integer(required=True, example='1'),
+    'publisher_id': fields.Integer(required=True, example='1'),
+    'content': fields.String(required=True, example='Only the report need to be submited.')
+    })

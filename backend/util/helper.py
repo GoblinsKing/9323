@@ -98,6 +98,22 @@ def getStaffInfo(raw):
             'term': raw.term
     }
 
+def getThreadInfo(raw):
+    return{
+            "id": raw.id,
+            'course_id': raw.course_id,
+            'title': raw.title,
+            'publisher_id': raw.publisher_id,
+            'content': raw.content
+    }
+
+def getCommentInfo(raw):
+    return{
+            "id": raw.id,
+            'thread_id': raw.thread_id,
+            'content': raw.content
+    }
+
 def authorize(request):
     t = request.headers.get('Authorization', None)
     if not t:

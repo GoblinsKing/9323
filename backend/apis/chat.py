@@ -9,8 +9,8 @@ api = Namespace('chat', description='Online Chat Services')
 @api.route('/message')
 class Chat(Resource):
     @api.response(200, 'Success')
-    @api.response(400, 'Missing Username/Password')
-    @api.response(403, 'Invalid Username/Password')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
     @api.expect(auth_details(api), message_details(api))
     @api.doc(description='''
         User can send a new message

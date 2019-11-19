@@ -45,9 +45,15 @@ class User(Resource):
     @api.response(400, 'Missing Arguments')
     @api.response(403, 'Invalid Auth Token')
     @api.expect(auth_details(api))
+    @api.param('user_id','the id of the user')
     @api.doc(description='''Get the user information''')
     def get(self):
         user = authorize(request)
+        user_id = request.args.get('user_id', None)
+        if (user_id is not None):
+            session = db.get_session()
+            user = session.query(db.User).filter_by(id = user_id).first()
+            session.close()
         return {
             "id": user.id,
             'zid': user.zid,
