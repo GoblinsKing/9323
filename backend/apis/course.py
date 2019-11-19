@@ -108,7 +108,7 @@ class Notice(Resource):
         return noticeList
 
 @api.route('/resource')
-class Resource(Resource):
+class Resources(Resource):
     @api.response(200, 'Success')
     @api.response(400, 'Missing Arguments')
     @api.response(403, 'Invalid Auth Token')
@@ -143,3 +143,22 @@ class Resource(Resource):
         if (resource is None):
             return None
         return getResourceInfo(resource)
+
+@api.route('/staff')
+class Staff(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.param('course_id', 'the id of the course which the user want to fetch')
+    @api.doc(description="Get the satff information of a course")
+    def get(self):
+        course_id = int(request.args.get('course_id', None))
+        session = db.get_session()
+        staffs = session.query(db.Teaching).filter_by(course_id=course_id).all()
+        session.close()
+        if (staffs is None):
+            return None
+        satffList = []
+        for satff in staffs:
+            satffList.append(getStaffInfo(satff))
+        return satffList

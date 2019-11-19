@@ -111,6 +111,7 @@ class Group(Base):
                         Column('leader_id', Integer),
                         Column('title', VARCHAR(20)),
                         Column('topic', VARCHAR(80)),
+                        Column('group_chatroom_id', Integer),
                         Column('num_member', Integer),
                         Column('num_backend', Integer),
                         Column('num_frontend', Integer))
@@ -166,6 +167,7 @@ def init_db():
     init_chatRoom(session)
     init_enrolment(session)
     init_assignment(session)
+    init_teaching(session)
     # finish init
     session.close()
 
@@ -212,4 +214,12 @@ def init_assignment(session):
             line = line.strip().split(',')
             assignment = Assignment(course_id=line[0], title=line[1], due_date=line[2], group_size=line[3], all_topics=line[4], content=line[5])
             session.add(assignment)
+    session.commit()
+
+def init_teaching(session):
+    with open('db/teaching.csv') as f:
+        for line in f.readlines():
+            line = line.strip().split(',')
+            teaching = Teaching(lecturer_id=line[0], course_id=line[1], term=line[2])
+            session.add(teaching)
     session.commit()

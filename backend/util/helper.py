@@ -47,6 +47,7 @@ def getGroupInfo(raw):
             'leader_id': raw.leader_id,
             "title": raw.title,
             'topic': raw.topic,
+            "group_chatroom_id": raw.group_chatroom_id,
             'num_member': raw.num_member,
             "num_backend": raw.num_backend,
             'num_frontend': raw.num_frontend
@@ -87,6 +88,14 @@ def getResourceInfo(raw):
             'title': raw.title,
             'group': raw.group,
             'content': raw.content
+    }
+
+def getStaffInfo(raw):
+    return{
+            "id": raw.id,
+            'lecturer_id': raw.lecturer_id,
+            'course_id': raw.course_id,
+            'term': raw.term
     }
 
 def authorize(request):

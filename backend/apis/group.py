@@ -51,7 +51,11 @@ class CreateGroup(Resource):
         else:
             num_frontend = 1
             skill = 'frontend'
-        new_group = db.Group(assignment_id=assignment_id, leader_id=user.id, title=title, topic=topic, num_member=1, num_backend=num_backend, num_frontend=num_frontend)
+        curr_assignment = session.query(db.Assignment).filter_by(id=assignment_id).first()
+        group_chatroom = db.ChatRoom(course_id=curr_assignment.course_id, channel="group")
+        session.add(group_chatroom)
+        session.commit()
+        new_group = db.Group(assignment_id=assignment_id, leader_id=user.id, title=title, topic=topic, group_chatroom_id = group_chatroom.id, num_member=1, num_backend=num_backend, num_frontend=num_frontend)
         session.add(new_group)
         session.commit()
         new_member = db.GroupMember(group_id=new_group.id, student_id=user.id, role=skill)
