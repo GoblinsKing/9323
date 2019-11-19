@@ -144,6 +144,27 @@ class Resources(Resource):
             return None
         return getResourceInfo(resource)
 
+@api.route('/resource/all')
+class AllResources(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.param('course_id', 'the id of the course which the user want to fetch')
+    @api.doc(description='''
+        Get all the resources in a given course
+    ''')
+    def get(self):
+        course_id = int(request.args.get('course_id', None))
+        session = db.get_session()
+        resources = session.query(db.Resource).filter_by(course_id=course_id).all()
+        session.close()
+        if (resources is None):
+            return None
+        resourceList = []
+        for resource in resources:
+            resourceList.append(getResourceInfo(resource))
+        return resourceList
+
 @api.route('/staff')
 class Staff(Resource):
     @api.response(200, 'Success')
