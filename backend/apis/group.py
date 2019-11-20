@@ -205,14 +205,16 @@ class LeaveGroup(Resource):
         group_id = int(request.args.get('group_id', None))
         session = db.get_session()
         group = session.query(db.Group).filter_by(id=group_id).first()
-        groupMember = session.query(db.GroupMember).filter_by(student_id=user.id).first()
+        groupMember = session.query(db.GroupMember).filter_by(group_id=group.id, student_id=user.id).first()
+        if (groupMember is None):
+            abort(400, "The user is not in that group.")
         group.num_member -= 1
         if (groupMember.role == 'backend'):
             group.num_backend -= 1
         else:
             group.num_frontend -= 1
-        session.commit()
         session.delete(groupMember)
+        session.commit()
         session.close()
         return {
             'message': 'success'
