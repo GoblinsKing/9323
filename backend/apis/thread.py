@@ -82,3 +82,24 @@ class Comment(Resource):
         for comment in comments:
             commentList.append(getCommentInfo(comment))
         return commentList
+
+@api.route('/course')
+class Threads(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.expect(auth_details(api))
+    @api.param('course_id', 'the id of the course which the user want to fetch')
+    @api.doc(description='''Get all threads in a course''')
+    def get(self):
+        authorize(request)
+        course_id = int(request.args.get('course_id', None))
+        session = db.get_session()
+        threads = session.query(db.Thread).filter_by(course_id=course_id).all()
+        session.close()
+        if (threads is None):
+            return None
+        threadList = []
+        for thread in threads:
+            threadList.append(getThreadInfo(thread))
+        return threadList
