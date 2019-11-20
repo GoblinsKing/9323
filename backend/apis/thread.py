@@ -56,7 +56,7 @@ class Comment(Resource):
         user = authorize(request)
         (thread_id, publisher_id, content) = unpack(request.json, 'thread_id', 'publisher_id', 'content')
         session = db.get_session()
-        comment = db.Comment(thread_id=thread_id, publisher_id=publisher_id, content=content, publisher_id = user.id)
+        comment = db.Comment(thread_id=thread_id, publisher_id=publisher_id, content=content)
         session.add(comment)
         session.commit()
         session.close()
