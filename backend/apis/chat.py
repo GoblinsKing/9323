@@ -54,14 +54,24 @@ class Chatroom(Resource):
     @api.param('channel', 'the channel which the user want to fetch(must be either "public" or "group")')
     @api.doc(description='''Get chat room id''')
     def get(self):
-        authorize(request)
+        user = authorize(request)
         course_id = int(request.args.get('course_id', None))
         channel = request.args.get('channel', None)
         if (channel != "public" and channel != "group"):
             abort(400, "Wrong channel request")
         session = db.get_session()
-        chatroom = session.query(db.ChatRoom).filter_by(course_id=course_id).filter_by(channel=channel).first()
-        session.close()
+        if (channel == "public"):
+            chatroom = session.query(db.ChatRoom).filter_by(course_id=course_id).filter_by(channel=channel).first()
+            session.close()
+        else:
+            groupMember = session.query(db.GroupMember).filter_by(student_id=user.id).first()
+            if (groupMember is None):
+                abort(400, "User is not in a group")
+            group = session.query(db.Group).filter_by(id=groupMember.group_id).first()
+            session.close()
+            return {
+                'chat_room_id': group.group_chatroom_id
+            }
         if (chatroom is None):
             return None
         return{
