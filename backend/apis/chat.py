@@ -44,6 +44,28 @@ class Chat(Resource):
             messageList.append(getMessageInfo(message))
         return messageList
 
+@api.route('/message/search')
+class ChatSearch(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.expect(auth_details(api))
+    @api.param('chat_room_id', 'the id of the chatroom which the user want to fetch')
+    @api.param('key_word', 'the key word you want to search')
+    @api.doc(description='''Search chat room messages''')
+    def get(self):
+        user = authorize(request)
+        chat_room_id = int(request.args.get('chat_room_id', None))
+        key_word = request.args.get('key_word', None)
+        session = db.get_session()
+        messages = session.query(db.Message).filter_by(chat_room_id=chat_room_id).all()
+        session.close()
+        messageList = []
+        for message in messages:
+            if (key_word in message.message):
+                messageList.append(getMessageInfo(message))
+        return messageList
+
 @api.route('/chatroom')
 class Chatroom(Resource):
     @api.response(200, 'Success')
