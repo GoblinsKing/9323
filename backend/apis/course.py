@@ -24,6 +24,25 @@ class Course(Resource):
             'courseInfo': getCourseInfo(course)
         }
 
+@api.route('/all')
+class AllCourse(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing Arguments')
+    @api.response(403, 'Invalid Auth Token')
+    @api.doc(description='''
+        Get all course information
+    ''')
+    def get(self):
+        session = db.get_session()
+        courses = session.query(db.Course)
+        session.close()
+        if (courses is None):
+            return None
+        courseList = []
+        for course in courses:
+            courseList.append(getCourseInfo(course))
+        return courseList
+
 @api.route('/assignment')
 class Assignment(Resource):
     @api.response(200, 'Success')
