@@ -43,6 +43,7 @@ def assignment_details(api):
     return api.model('assignment_details', {
     'course_id': fields.Integer(required=True, example='1'),
     'title': fields.String(required=True, example='Group Project'),
+    'publish_date': fields.String(required=True, example='2019-11-10'),
     'due_date': fields.String(required=True, example='2019-11-30'),
     'group_size': fields.Integer(required=True, example='4'),
     'all_topics': fields.Integer(required=True, example='Project-based learning Management App|Peer review App'),

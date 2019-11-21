@@ -36,9 +36,9 @@ class Assignment(Resource):
     ''')
     def post(self):
         authorize(request)
-        (course_id, title, due_date, group_size, all_topics, content) = unpack(request.json, 'course_id', 'title', 'due_date', 'group_size', 'all_topics', 'content')
+        (course_id, title, publish_date, due_date, group_size, all_topics, content) = unpack(request.json, 'course_id', 'title', 'publish_date', 'due_date', 'group_size', 'all_topics', 'content')
         session = db.get_session()
-        new_assignment = db.Assignment(course_id=course_id, title=title, due_date=due_date, group_size=group_size, all_topics=all_topics, content=content)
+        new_assignment = db.Assignment(course_id=course_id, title=title, publish_date=publish_date, due_date=due_date, group_size=group_size, all_topics=all_topics, content=content)
         session.add(new_assignment)
         session.commit()
         session.close()

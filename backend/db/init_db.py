@@ -136,6 +136,7 @@ class Assignment(Base):
                         Column('id', Integer, primary_key=True),
                         Column('course_id', Integer),
                         Column('title', VARCHAR(50)),
+                        Column('publish_date', VARCHAR(20)),
                         Column('due_date', VARCHAR(20)),
                         Column('group_size', Integer),
                         Column('all_topics', TEXT),
@@ -212,7 +213,7 @@ def init_assignment(session):
     with open('db/assignment.csv') as f:
         for line in f.readlines():
             line = line.strip().split(',')
-            assignment = Assignment(course_id=line[0], title=line[1], due_date=line[2], group_size=line[3], all_topics=line[4], content=line[5])
+            assignment = Assignment(course_id=line[0], title=line[1], publish_date=line[2], due_date=line[3], group_size=line[4], all_topics=line[5], content=line[6])
             session.add(assignment)
     session.commit()
 
