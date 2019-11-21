@@ -99,19 +99,29 @@ def getStaffInfo(raw):
     }
 
 def getThreadInfo(raw):
+    session = db.get_session()
+    comments = session.query(db.Comment).filter_by(thread_id=raw.id).all()
+    user = session.query(db.User).filter_by(id=raw.publisher_id).first()
+    session.close()
+    commentList = []
+    if (comments is not None):
+        for comment in comments:
+            commentList.append(getCommentInfo(comment))
     return{
             "id": raw.id,
             'course_id': raw.course_id,
             'title': raw.title,
-            'publisher_id': raw.publisher_id,
-            'content': raw.content
+            'publisher_name': user.name,
+            'content': raw.content,
+            'comments': commentList
     }
 
 def getCommentInfo(raw):
     return{
             "id": raw.id,
             'thread_id': raw.thread_id,
-            'content': raw.content
+            'content': raw.content,
+            'publisher_id': raw.publisher_id
     }
 
 def authorize(request):
