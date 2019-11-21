@@ -67,7 +67,7 @@ class Thread(Base):
                         Column('id', Integer, primary_key=True),
                         Column('course_id', Integer),
                         Column('title', VARCHAR(20)),
-                        #Column('publish_time', VARCHAR(20)),
+                        Column('up_vote', Integer),
                         Column('publisher_id', Integer),
                         Column('content', TEXT))
     def __repr__(self):

@@ -114,7 +114,8 @@ def getThreadInfo(raw):
             'title': raw.title,
             'publisher_name': user.name,
             'content': raw.content,
-            'comments': commentList
+            'comments': commentList,
+            "up_vote": raw.up_vote
     }
 
 def getCommentInfo(raw):
