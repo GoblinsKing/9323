@@ -169,6 +169,9 @@ def init_db():
     init_enrolment(session)
     init_assignment(session)
     init_teaching(session)
+    init_resources(session)
+    init_message(session)
+    init_notices(session)
     # finish init
     session.close()
 
@@ -223,4 +226,28 @@ def init_teaching(session):
             line = line.strip().split(',')
             teaching = Teaching(lecturer_id=line[0], course_id=line[1], term=line[2])
             session.add(teaching)
+    session.commit()
+
+def init_message(session):
+    with open('db/chatMessages.csv') as f:
+        for line in f.readlines():
+            line = line.strip().split(',')
+            message = Message(chat_room_id=line[0], user_id=line[1], message=line[2])
+            session.add(message)
+    session.commit()
+
+def init_notices(session):
+    with open('db/notices.csv') as f:
+        for line in f.readlines():
+            line = line.strip().split(',')
+            notice = Notice(course_id=line[0], title=line[1], content=line[2], publisher_id=line[3])
+            session.add(notice)
+    session.commit()
+
+def init_resources(session):
+    with open('db/resources.csv') as f:
+        for line in f.readlines():
+            line = line.strip().split(',')
+            resource = Resource(course_id=line[0], title=line[1], group=line[2], content=line[3])
+            session.add(resource)
     session.commit()
