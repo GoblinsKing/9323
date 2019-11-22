@@ -3,3 +3,4 @@
 .DS_Store
 frontend/新建文本文档.txt
 frontend/新建文本文档.txt
+*.pyc
