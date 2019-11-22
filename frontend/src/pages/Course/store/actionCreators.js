@@ -12,7 +12,7 @@ const getExistAssnInfo = (data) => ({
 	assnInfo: fromJS(data)
 });
 
-//  获取assn信息
+// get assn info
 export const getAssnInfo= (token, course_id) => {
 	const URL = baseURL + '/course/assignment?course_id=' + course_id;
 	const axiosConfig = {
@@ -36,7 +36,7 @@ const getExistNotice = (data) => ({
 	courseNotice: fromJS(data)
 });
 
-// 获取课程Notice
+// get course Notice
 export const getCourseNotice = (course_id) => {
 	const URL = baseURL + '/course/notice?course_id=' + course_id;
 	const axiosConfig = {

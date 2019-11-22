@@ -17,9 +17,12 @@ class MenuBlock extends Component {
 	
 	detailContentHeader() {
 		const courseName = this.props.whichCourse;
-		// 自定义需删除////////
-		const courseTitle = "Software as a Service Project";
-		///////////////
+		const { userAllCourses } = this.props;
+		var courseTitle = null;
+		userAllCourses.forEach(element => {
+			if (element.get("code") === courseName)
+				courseTitle = element.get("title")
+		});
 		return (
 			<ContentHeader>
 				<MenuButton onClick={ () => this.props.menuToggle(this.props.menuStatus) }>Menu Toggle</MenuButton>
@@ -95,6 +98,7 @@ class MenuBlock extends Component {
 const mapState = (state) => {
 	return {
 		menuStatus: state.getIn(["detail", "menuStatus"]),
+		userAllCourses: state.getIn(["login", "userAllCourses"]),
 		whichCourse: state.getIn(["detail", "whichCourse"]),
 		whichPage: state.getIn(["detail", "whichPage"])
 	}

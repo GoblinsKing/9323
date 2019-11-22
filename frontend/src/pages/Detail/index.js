@@ -16,7 +16,6 @@ class Detail extends Component {
 	render() {
 		const whichCourse = this.props.match.params.id;
 		const whichPage = this.props.match.params.detail;
-		// 传递数据
 		this.props.matchParams(whichCourse, whichPage);
 		if (this.props.loginStatus) {
 			if (whichPage === "staff") {

@@ -25,10 +25,6 @@ export const menuShow = (menuStatus) => ({
 });
 
 // ########################################################################
-
-// 登录成功后: 获取用户enrollment信息，得到course_id，
-// 聊天页面: 通过channel("public", "group"), course_id 得到chat_room_id，
-// 聊天页面: 获取聊天信息和发送聊天信息都需要 chat_room_id 
 const getPublicChatRoomID = (data) => ({
 	type: constants.GET_PUBLIC_CHATROOM_ID,
 	publicChatRoomID: fromJS(data)
@@ -49,7 +45,7 @@ const getGroupChatMessage = (data) => ({
 	GroupMessages: fromJS(data)
 });
 
-// 获取Public聊天室ID
+// getChatRoomID_public
 export const getChatRoomID_public = (token, chanel, course_id) => {
 	const AxiosConfig = {
 		headers: {
@@ -62,7 +58,7 @@ export const getChatRoomID_public = (token, chanel, course_id) => {
 		axios.get(chatUrl , AxiosConfig).then((res) => {
 			console.log(res)
 			dispatch(getPublicChatRoomID(res.data));
-			// 获取到public chat_room_id后, 获取public聊天室数据
+			// 获取到public chat_room_id后, get public messages
 			const URL = baseURL + '/chat/message?chat_room_id=' + res.data.chat_room_id;
 			axios.get(URL, AxiosConfig).then((res1) => {
 				console.log(res1)
@@ -77,7 +73,7 @@ export const getChatRoomID_public = (token, chanel, course_id) => {
 	}
 };
 
-// 获取Group聊天室ID
+// getChatRoomID_group
 export const getChatRoomID_group = (token, chanel, course_id) => {
 	const AxiosConfig = {
 		headers: {
@@ -90,7 +86,6 @@ export const getChatRoomID_group = (token, chanel, course_id) => {
 		axios.get(chatUrl, AxiosConfig).then((res) => {
 			console.log(res)
 			dispatch(getGroupChatRoomID(res.data));
-
 			// 获取到group chat_room_id后, 获取group聊天室数据
 			const URL = baseURL + '/chat/message?chat_room_id=' + res.data.chat_room_id;
 			axios.get(URL, AxiosConfig).then((res1) => {
@@ -105,7 +100,6 @@ export const getChatRoomID_group = (token, chanel, course_id) => {
 
 	}
 };
-
 
 // 聊天室发送信息public
 export const sendPublicMessage = (token, chat_room_id, message) => {
@@ -145,7 +139,7 @@ export const sendPublicMessage = (token, chat_room_id, message) => {
 	}
 };
 
-// 聊天室发送信息group
+// sendGroupMessage
 export const sendGroupMessage = (token, chat_room_id, message) => {
 	const URL = baseURL + '/chat/message';
 	const AxiosConfig = {
@@ -162,8 +156,7 @@ export const sendGroupMessage = (token, chat_room_id, message) => {
 	return (dispatch) => {
 		axios.post(URL, sendData, AxiosConfig).then((res) => {
 			console.log(res)
-
-			// 发送成功后重新获取group数据
+			// refresh data
 			const config = {
 				headers: {
 					"accept": "application/json",
@@ -214,7 +207,7 @@ const getAllExistGroupInfo = (data) => ({
 	allGroupInfo: fromJS(data)
 });
 
-//  根据assignment_id, 获取所有同一个assignment下所有group信息
+// assignment_id, get all groups info under same assn
 export const getAllGroupInfo = (token, assignment_id) => {
 	const URL = baseURL + '/group/all?assignment_id=' + assignment_id;
 	const axiosConfig = {
@@ -238,7 +231,7 @@ const getGroupDetailInfo = (data) => ({
 	groupDetailInfo: fromJS(data)
 });
 
-// 根据groupId 获取group详细信息
+// get group detail info
 export const getGroupDetail = (token, groupId) => {
 	const URL = baseURL + '/group/?group_id=' + groupId;
 	const axiosConfig = {
@@ -277,7 +270,7 @@ export const createNewGroup = (token, currentAssignmentID, createGroupTitle, cre
 	return (dispatch) => {
 		axios.post(URL, sendData, axiosConfig).then((res) => {
 			console.log(res)
-			// creategroup后，重新获取所有group的信息
+			// creategroup，then get all group info
 			dispatch(getAllGroupInfo(token, currentAssignmentID));
 		}).catch(() => {
 			console.log('Create Group Failure!');
@@ -315,16 +308,17 @@ export const matchGroup = (token, currentAssignmentID, matchGroupPreTopic, match
 // join group
 export const confirmJoinGroup = (token, currentAssignmentID, join_group_skill, join_group_id) => {
 	const URL = baseURL + '/group/member?skill=' + join_group_skill + '&group_id=' + join_group_id;
-	const AxiosConfig = {
-		headers: {
-			"accept": "application/json",
-			"Authorization": token
-		}
-	};
 	return (dispatch) => {
-		axios.post(URL, AxiosConfig).then((res) => {
-			console.log(res)
-			// join group后，重新获取所有group的信息
+		// axios.post(URL, AxiosConfig).then((res) => {
+		axios({
+			method: 'post',
+			url: URL,
+			headers: {
+				"accept": "application/json",
+				"Authorization": token
+			}
+		}).then((res) => {
+			console.log(res);
 			dispatch(getAllGroupInfo(token, currentAssignmentID));
 		}).catch(() => {
 			console.log('Confirm Join Group Failure!');
@@ -343,7 +337,6 @@ export const confirmLeaveGroup = (token, currentAssignmentID, groupId) => {
 	};
 	return (dispatch) => {
 		axios.get(URL, AxiosConfig).then((res) => {
-			// leave group后，重新获取所有group的信息
 			dispatch(getAllGroupInfo(token, currentAssignmentID));
 		}).catch(() => {
 			console.log('Confirm Leave Group Failure!');
@@ -351,9 +344,6 @@ export const confirmLeaveGroup = (token, currentAssignmentID, groupId) => {
 	}
 };
 // ########################################################################
-
-
-// 获取assn信息在Course首页处理，因为要在group中用到这个数据
 // put new assn
 export const putNewAssn = (token, course_id, assnTitle, publish_date, due_date, group_size, all_topics, content) => {
 	const URL = baseURL + '/course/assignment';
@@ -400,7 +390,6 @@ export const getCourseStaffInfo = (token, course_id) => {
 	return (dispatch) => {
 		// 返回id, lecturer_id, course_id, term 数组
 		axios.get(URL, AxiosConfig).then((res) => {
-
 			// 接着匹配出staff详细信息
 			const config = {
 				headers: {
@@ -436,7 +425,7 @@ const getResourceInfo = (data) => ({
 	courseResourceInfo: fromJS(data)
 });
 
-//  get课程lecture信息
+//  get course lecture info
 export const getCourseResourceInfo = (course_id) => {
 	const URL = baseURL + '/course/resource/all?course_id=' + course_id;
 	const AxiosConfig = {
@@ -454,7 +443,30 @@ export const getCourseResourceInfo = (course_id) => {
 	}
 };
 
-// post课程lecture信息
+
+const getDetailResource = (data) => ({
+	type: constants.COURSE_RESOURCE_DETAIL,
+	courseResourceDetail: fromJS(data)
+});
+
+export const getResourceDetail = (resource_id) => {
+	const URL = baseURL + '/course/resource?resource_id=' + resource_id;
+	const AxiosConfig = {
+		headers: {
+			"accept": "application/json"
+		}
+	};
+	return (dispatch) => {
+		axios.get(URL, AxiosConfig).then((res) => {
+			console.log(res)
+			dispatch(getDetailResource(res.data))
+		}).catch(() => {
+			console.log('getResourceDetail Failure!');
+		})
+	}
+};
+
+// post course lecture info
 export const postCourseResource = (token, course_id, resourceTime, resourceTitle, resourceContent) => {
 	const URL = baseURL + '/course/resource';
 	const AxiosConfig = {
@@ -587,21 +599,22 @@ export const postThreadComments = (token, thread_id, content, publisher_id, cour
 // 	type: constants.GET_UPVOTES,
 // 	currentUpvotes: data
 // });
-
 // upVoteThread
+
 export const upVoteThread = (token, course_id, thread_id) => {
 	const URL = baseURL + '/thread/up_vote?thread_id=' + thread_id;
-	const config = {
-		headers: {
-			"accept": "application/json",
-			"Authorization": token
-		}
-	};
 	return (dispatch) => {
-		axios.post(URL, config).then((res) => {
-			console.log(res)
-			// dispatch(getUpvotes(res.curr_up_vote))
-			dispatch(getThreads(token, course_id))
+		// axios.post(URL, config).then((res) => {
+		axios({
+			method: 'post',
+			url: URL,
+			headers: {
+				"accept": "application/json",
+				"Authorization": token
+			}
+		}).then((res) => {
+			console.log(res);
+			dispatch(getThreads(token, course_id));
 		}).catch(() => {
 			console.log('upVoteThread Failure!');
 		})

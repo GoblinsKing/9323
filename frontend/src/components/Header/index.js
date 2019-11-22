@@ -94,7 +94,6 @@ const mapState = (state) => {
 	return {
 		loginStatus: state.getIn(["login", "loginStatus"]),
 		userAllCourses: state.getIn(["login", "userAllCourses"]),
-		// 控制显示不显示header and footer
 		whichMore: state.getIn(["detail", "whichMore"])
 	}
 };

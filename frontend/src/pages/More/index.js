@@ -9,7 +9,7 @@ class More extends Component {
 	render() {
 		const whichCourse = this.props.match.params.id;
 		const whichMore = this.props.match.params.more;
-		const { loginStatus, assnInfo, groupDetailInfo } = this.props;
+		const { loginStatus, assnInfo, groupDetailInfo, courseResourceDetail } = this.props;
 		this.props.whichDetailMore(whichMore);
 		if (loginStatus) {
 			if (whichMore === "assnDetail") {
@@ -35,6 +35,16 @@ class More extends Component {
 					</ContentWrapper>
 					
 				)
+			} else if (whichMore === "resourceDetail") {
+				return (
+					<ContentWrapper>
+						<Nav>
+							<div className="moreTitle">{`${whichCourse}: ${courseResourceDetail.get("title")}`}</div>
+							<div className="moreContent">{courseResourceDetail.get("content")}</div>
+						</Nav>
+					</ContentWrapper>
+					
+				)
 			}
 		} 
 		return (
@@ -53,6 +63,7 @@ const mapState = (state) => {
 		loginStatus: state.getIn(["login", "loginStatus"]),
 		assnInfo: state.getIn(["course", "assnInfo"]),
 		groupDetailInfo: state.getIn(["detail", "groupDetailInfo"]),
+		courseResourceDetail: state.getIn(["detail", "courseResourceDetail"])
 	}
 }
 

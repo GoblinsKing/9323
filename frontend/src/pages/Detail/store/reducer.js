@@ -15,6 +15,7 @@ const defaultState = fromJS({
 	allGroupInfo: [],
 	courseStaffInfo: [],
 	courseResourceInfo: [],
+	courseResourceDetail: [],
 	courseThreads: [],
 	threadComments: [],
 	currentUpvotes: 0
@@ -51,6 +52,8 @@ export default (state = defaultState, action) => {
 			return state.set('courseStaffInfo', action.courseStaffInfo);
 		case constants.COURSE_RESOURCE_INFO:
 			return state.set('courseResourceInfo', action.courseResourceInfo);
+		case constants.COURSE_RESOURCE_DETAIL:
+			return state.set('courseResourceDetail', action.courseResourceDetail);
 		case constants.COURSE_THREADS:
 			return state.set('courseThreads', action.courseThreads);
 		case constants.GET_THREAD_COMMENTS:
@@ -61,3 +64,4 @@ export default (state = defaultState, action) => {
 			return state;
 	}
 };
+

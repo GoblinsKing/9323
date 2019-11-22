@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import { actionCreators } from './store';
 import { actionCreators as DetailActionCreators } from '../../pages/Detail/store';
 import * as helpers from '../../helpers.js';
 import { ContentWrapper, Nav, NavItem, 
@@ -51,7 +52,7 @@ class LoginHome extends Component {
                         >Cancel</button>
                         <button 
 							className="modal-operator-button confirm"
-							// course_id 设置为0用来区分是不是公共post
+							// course_id set to 0 to judge is general or not
 							onClick = { () => { this.setState({ createPostStatus: false });
 												this.props.postGeneral(token, 0, generalPostTitle, generalPostContent) }}
                         >Confirm</button>
@@ -119,10 +120,6 @@ class LoginHome extends Component {
 								<span className="iconfont iconColor">&#xe66f;</span>
 								<span className="num">{item.get('comments').count()}</span>
 							</div>
-							{/* 点击comment icon 出现一个input， 再次点击icon, input 收起来
-								思路： state 里存储当前点击的icon 的id, 和input 的状态，
-								当点击icon 的时候， 就不是state 里面的iconId设置成自己的，inputStatus 设置成true,
-								,然后根据这两个数值判断显示与否 */}
 						</div>
 							
 						{
@@ -186,7 +183,7 @@ class LoginHome extends Component {
                             <div className="generalHead">
                                 General Information
                             </div>
-							{/* 控制是否发post */}
+							{/* control post */}
 							<div 
 								className="createGeneralInfo"
 								onClick = {() => {this.setState({createPostStatus: true})}}
@@ -206,8 +203,9 @@ class LoginHome extends Component {
 	}
 
 	componentDidMount() {
-		// 获取course_id=0的数据
+		// get data when course_id=0 
 		this.props.getGeneral(this.props.token, 0);
+		this.props.getAllCourses();
 	}
 }
 
@@ -225,7 +223,10 @@ const mapState = (state) => {
 };
 
 const mapDispatch = (dispatch) => ({
-	// 复用assnpage, getThreads, postThreads 接口
+	getAllCourses() {
+		dispatch(actionCreators.getCourses());
+	},
+	// reuse assnpage, getThreads, postThreads Interface
 	getGeneral(token, course_id){
 		dispatch(DetailActionCreators.getThreads(token, course_id));
 	},

@@ -9,7 +9,6 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Course from './pages/Course';
 import Login from './pages/Login';
-import Search from './pages/Search';
 import Detail from './pages/Detail';
 import More from './pages/More';
 
@@ -29,7 +28,6 @@ class App extends Component {
                                 <Header />
                                 <Switch>
                                     <Route path='/login'  exact component={Login}></Route>
-                                    <Route path='/search'  exact component={Search}></Route>
                                     <Route path='/' exact component={Home}></Route>
                                     <Route path='/:id' exact component={Course}></Route>
                                     <Route path='/:id/:detail' exact component={Detail}></Route>

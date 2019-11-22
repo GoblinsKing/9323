@@ -487,6 +487,9 @@ export const LectureInfo = styled.div`
 		cursor: pointer;
 		color: #d48806;
 	}
+	.link{
+		text-decoration: none;
+	}
 `;
 
 export const AssignmentBlock = styled.div`
@@ -1049,12 +1052,16 @@ export const SearchModalWrapper = styled.div`
 	}
 	.search-result {
 		height: 180px;
-		background: yellow;
+		border: 1px solid #bfbfbf;
 		width: 500px;
+		background: #fff;
 		font-size: 14px;
-		font-weight: bold;
 		margin: 0 50px;
 		margin-bottom: 10px;
+		padding-left: 20px; 
+		box-sizing: border-box;
+		overflow: auto;
+		color: black;
 	}
 
 	.search-confirm{

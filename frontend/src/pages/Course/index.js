@@ -119,7 +119,6 @@ class Course extends Component {
 				courseTitle = element.get("title")
 		});
 		
-		// 登录后课程主页
 		if (loginStatus) {
 			return (
 				<ContentWrapper>
@@ -199,16 +198,16 @@ class Course extends Component {
 
 						<ContentDue>
 							<div className="noticeBlock">Due Dates</div>
-							{/* 需要获取动态数据 */}
+							{/* Due Block*/}
 							<div className="dueBlock">
 								<div className="base">
-									<div className="sixty" style={{width: this.calculateTimeRate()}}>HW2</div>
+									<div className="sixty" style={{width: this.calculateTimeRate()}}>{this.props.assnInfo.get("title")}</div>
 								</div>
 								<div className="num">{this.calculateTimeRate()}</div>
 							</div>
 							<div className="dueBlock">
 								<div className="base">
-									<div className="hundred">HW1</div>
+									<div className="hundred">Project1</div>
 								</div>
 								<div className="num">100%</div>
 							</div>

@@ -126,9 +126,20 @@ class GroupPage extends Component {
 						<span className="groupInfoTopic">{item.get("topic")}</span>
 						<span className="groupInfoMember">{item.get("num_frontend")}</span>
 						<span className="groupInfoMember">{item.get("num_backend")}</span>
-
-						<span className="iconfont joinIcon" onClick={()=>{ this.setState({join_group_id: item.get("id"), join_group: true }) }}>&#xe608;</span>
-						<span className="iconfont leaveIcon" onClick={()=>{this.props.confirmLeaveGroup(token, this.state.currentAssignmentID, item.get("id"))} }>&#xe702;</span>
+						{
+							item.get("leader_id") !== this.props.userInfo.get("id") ?
+							<span className="iconfont joinIcon" 
+								  onClick={()=>{ this.setState({join_group_id: item.get("id"), join_group: true }) }}>
+								  &#xe608;
+							</span> : null
+						}
+						{
+							item.get("leader_id") !== this.props.userInfo.get("id") ?
+							<span className="iconfont leaveIcon" 
+								  onClick={()=>{this.props.confirmLeaveGroup(token, this.state.currentAssignmentID, item.get("id"))} }>
+								  &#xe702;
+							</span> : null
+						}
 					</GroupContent>
 				)
 			}
@@ -139,7 +150,6 @@ class GroupPage extends Component {
 		})
 	}
 
-	// 直接加入
 	confirm_join_group(){
 		const { token } = this.props;
 		const { currentAssignmentID, join_group_skill, join_group_id} = this.state;
@@ -199,21 +209,6 @@ class GroupPage extends Component {
 									value={ this.state.createGroupTitle }
 									onChange={ (e) => this.setState({ createGroupTitle: e.target.value }) }></input>
 						</div>
-						{/* Group Type */}
-						{/* <div className="navContent">
-							<div className="groupMenu type">Group Type:</div>
-							<select className="groupInput"
-									value={ this.state.createGroupType}
-									onChange={ (e) => this.setState({ createGroupType: e.target.value }) }> 
-							{  
-								groupTypes.map((item) => {
-									return (
-										<option key={item.id} value={item.type}>{item.type}</option>
-									)
-								})
-							}
-							</select> 
-						</div> */}
 						{/* Perferred Topic */}
 						<div className="navContent">
 							<div className="groupMenu type">Perferred Topic:</div>
@@ -280,21 +275,6 @@ class GroupPage extends Component {
 				<div className="groupCreate">
 					<div className="navHead">Match Group</div>
 					<div className="navAllContent">
-						{/* Group Type */}
-						{/* <div className="navContent">
-							<div className="groupMenu type">Group Type:</div>
-							<select className="groupInput"
-									value={ this.state.joinGroupType}
-									onChange={ (e) => this.setState({ joinGroupType: e.target.value }) }> 
-							{  
-								groupTypes.map((item) => {
-									return (
-										<option key={item.id} value={item.type}>{item.type}</option>
-									)
-								})
-							}
-							</select> 
-						</div> */}
 						{/* Perferred Topic */}
 						<div className="navContent">
 							<div className="groupMenu type">Perferred Topic:</div>

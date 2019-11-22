@@ -13,6 +13,7 @@ export const GET_GROUP_DETAIL_INFO = 'detail/GET_GROUP_DETAIL_INFO';
 export const GET_ALL_GROUP_INFO = 'detail/GET_ALL_GROUP_INFO';
 export const COURSE_STAFF_INFO = 'detail/COURSE_STAFF_INFO';
 export const COURSE_RESOURCE_INFO = 'detail/COURSE_RESOURCE_INFO';
+export const COURSE_RESOURCE_DETAIL = 'detail/COURSE_RESOURCE_DETAIL';
 export const COURSE_THREADS = 'detail/COURSE_THREADS';
 export const GET_THREAD_COMMENTS = 'detail/GET_THREAD_COMMENTS';
 export const GET_UPVOTES = 'detail/GET_UPVOTES';

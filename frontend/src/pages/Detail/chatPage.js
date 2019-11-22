@@ -22,7 +22,8 @@ class ChatPage extends Component {
 			publicInputValue: '',
 			groupInputValue: '',
 			public_modal_status: false,
-			group_modal_status: false
+			group_modal_status: false,
+			searchKeyWord: ''
 		};
 	}
 
@@ -35,7 +36,8 @@ class ChatPage extends Component {
 						const user_id = item.get("user_id");
 						const message = item.get("message");
 						if ( user_id === this.props.userInfo.get("id")) {
-							// 如果message的user_id等于this.props.userInfo.get("id")则右浮动，其它的左浮动
+							// if message的user_id ==== this.props.userInfo.get("id") then right float，other left float
+							// use flexbox
 							return (
 								<div key={item.get("id")} className="myMessage">
 									<div className="myName">{ user_id }</div>
@@ -57,7 +59,7 @@ class ChatPage extends Component {
 		}
 	}
 
-	// 点击"return"按键的时候, 先发送input里面的数据, 然后清空input
+	// after click return, send message then clear input
 	handlePublicKeyUp = (e) => {
 		if (e.keyCode === 13 && e.target.value !== ''){
 			this.props.sendPublicMessage(this.props.token, this.props.publicChatRoomID.get("chat_room_id"), this.state.publicInputValue);
@@ -78,20 +80,45 @@ class ChatPage extends Component {
 	}
 
 	message_search(searchType){
+		const { token, groupChatRoomID, publicChatRoomID } = this.props;
+		let chatId = null;
+		if (searchType === "Public"){
+			chatId = publicChatRoomID.get("chat_room_id");
+		}else{
+			if (groupChatRoomID) {
+				chatId = groupChatRoomID.get("chat_room_id");
+			}
+		}
 		return (
             <SearchModalWrapper>
                 <div className="pmodal">
 					<div className="modal-post-notice">{searchType} Message Search</div>
                     <div className="pmodal-title">
 						<input className="ptitle-input"
+							value={ this.state.searchKeyWord }
+							onChange={ (e) => { this.setState({ searchKeyWord: e.target.value }) }}
 							placeholder="Input keyword"
 						></input>
-						<button className="publicSearch">search</button>
+						<button 
+							className="publicSearch"
+							onClick = {()=>{ this.props.searchChatMessage(token, this.state.searchKeyWord, chatId) }}>search
+						</button>
 					</div>
                     <div className="search-result">
+						<ul>
+							{	
+								this.props.searchMessages ?
+								this.props.searchMessages.map((item)=>{
+									return(
+									<li key={item.get('id')}>{item.get('message')}</li>
+									)
+								}) 
+								: null
+							}
+						</ul>
 					</div>
 					<button className="search-confirm" 
-							onClick = { () => { this.setState({ public_modal_status: false, group_modal_status: false}) }}>
+							onClick = { () => { this.setState({ public_modal_status: false, group_modal_status: false, searchKeyWord:''}) }}>
 						Back
 					</button>
                 </div>
@@ -105,17 +132,17 @@ class ChatPage extends Component {
 				PublicMessages, GroupMessages } = this.props;
 		return (
 			<ShowChatPage>
-				{/* public频道展示 */}
+				{/* public channel */}
 				<div className="chatPageLeft">
 					<div className="chatHeader">
 						Public Chatting Room
 						<span className="iconfont searchIcon" onClick={()=>{this.setState({public_modal_status: true})}}>&#xeafe;</span>
 					</div>
 					<div className="chatRoom" >
-						{/* public message 展示 */}
+						{/* public message s */}
 						{ this.handleChatMessage(PublicMessages)}
 
-						{/* chat message 自动往上滑动 */}
+						{/* chat message auto up */}
 						<div style={{ float:"left", clear: "both" }}
 			             	ref={(el) => { this.publicMessagesEnd = el; }}>
 			        	</div>
@@ -134,14 +161,14 @@ class ChatPage extends Component {
 
 				<div className="chatPageMiddle"></div>
 
-				{/* group频道展示 */}
+				{/* group channel */}
 				<div className="chatPageRight">
 					<div className="chatHeader Group">
 						Group Chatting Room
 						<span className="iconfont searchIcon" onClick={()=>{this.setState({group_modal_status: true})}}>&#xeafe;</span>
 					</div>
 					<div className="chatRoom">
-						{/* group message 展示 */}
+						{/* group message*/}
 						{ this.handleChatMessage(GroupMessages)}
 
 					</div>
@@ -151,7 +178,7 @@ class ChatPage extends Component {
 						   onKeyUp={this.handleGroupKeyUp}>
 					</input>
 					
-					{/* 用户自己有group才有这个功能 */}
+					{/* after created group */}
 					<button onClick={() => { groupChatRoomID ? this.props.sendGroupMessage(token, groupChatRoomID.get("chat_room_id"), this.state.groupInputValue) : this.setState({ groupInputValue: '' }) ;
 											  this.setState({ groupInputValue: '' }) }}>Send
 					</button>
@@ -187,7 +214,7 @@ class ChatPage extends Component {
 	}
 	
 	componentDidMount() {
-		// this.interval = setInterval(() => this.refreshChatMessage(), 2000);
+		this.interval = setInterval(() => this.refreshChatMessage(), 2000);
 		this.refreshChatMessage();
 		this.scrollToBottom();
 		let key_word = "hi";
@@ -198,9 +225,10 @@ class ChatPage extends Component {
 	componentDidUpdate() {
 		this.scrollToBottom();
 	}
-	// componentWillUnmount(){
-	// 	clearInterval(this.interval);
-	// }
+	
+	componentWillUnmount(){
+		clearInterval(this.interval);
+	}
 }
 
 const mapState = (state) => {

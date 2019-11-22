@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import MenuBlock from './menuBlock';
@@ -103,11 +104,17 @@ class LecturePage extends Component {
 	}
 
 	lectureInfo(doc){
+		const { whichCourse, whichPage } = this.props;
 		return (
 			<LectureInfo key={doc.get("id")}>
 				<p className="time">{doc.get("group")}</p>
 				<div className="fileBlock">
-					<span className="file">{`${doc.get("title")}: ${doc.get("content")}`}</span>
+					<Link to={`/${whichCourse}/${whichPage}/resourceDetail`} className="link">
+						<span className="file" 
+						      onClick={ () => this.props.getResourceDetail(doc.get("id")) }>
+							{doc.get("title")}
+						</span>
+					</Link>
 					<span className="iconfont downloadIcon">&#xe68a;</span>
 				</div>
 			</LectureInfo>
@@ -132,7 +139,7 @@ class LecturePage extends Component {
 						this.post_Resource() :
 						null
 					}
-                    {/* 这是全部的文件map根据week决定 */}
+                    {/* map files */}
                     <div className="wholeLectureFile">
 					{
 						this.props.courseResourceInfo.map((item) => {
@@ -157,13 +164,18 @@ const mapState = (state) => {
 		token: state.getIn(["login", "token"]),
 		userAllCourses: state.getIn(["login", "userAllCourses"]),
 		whichCourse: state.getIn(["detail", "whichCourse"]),
-		courseResourceInfo: state.getIn(["detail", "courseResourceInfo"])
+		whichPage: state.getIn(["detail", "whichPage"]),
+		courseResourceInfo: state.getIn(["detail", "courseResourceInfo"]),
+		courseResourceDetail: state.getIn(["detail", "courseResourceDetail"]),
 	}
 };
 
 const mapDispatch = (dispatch) => ({
 	getCourseResourceInfo(course_id) {
 		dispatch(actionCreators.getCourseResourceInfo(course_id));
+	},
+	getResourceDetail(resource_id){
+		dispatch(actionCreators.getResourceDetail(resource_id));
 	},
 	postCourseResource(token, course_id, resourceTime, resourceTitle, resourceContent){
 		dispatch(actionCreators.postCourseResource(token, course_id, resourceTime, resourceTitle, resourceContent));

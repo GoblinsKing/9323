@@ -55,7 +55,7 @@ class AssnPage extends Component {
 		return Math.round(leftTime);
 	}
 
-	// 同时只有一个assn
+	// only one assn at the same time
 	existAssnInfo(assnInfo){
 		const { whichCourse, whichPage } = this.props;
 		// return assnInfo.map((item) => {
