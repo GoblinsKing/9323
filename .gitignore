@@ -4,3 +4,4 @@
 frontend/新建文本文档.txt
 frontend/新建文本文档.txt
 *.pyc
+frontend/node_modules/*
