@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { actionCreators } from './store';
 import { actionCreators as DetailActionCreators } from '../../pages/Detail/store';
 import * as helpers from '../../helpers.js';
@@ -72,11 +73,12 @@ class LoginHome extends Component {
 				return (
 				<tr key={item.get('code')}>
 					<td>
-					<a href={`https://webcms3.cse.unsw.edu.au/${item.get('code')}/19T3`} 
-						target="_blank"
-						rel="noopener noreferrer">																													
-						<p className="courseCode" >{item.get('code')}</p>
-					</a>
+						<Link to={`/${item.get("code")}`} key={item.get("id")}>
+							<div 
+								className="courseCode" 
+								onClick={() => { this.setState({currentCourseCode: item.get("code")}) }}
+							>{ item.get("code") }</div>
+						</Link>																			
 						{item.get('title')}															
 					</td>
 				</tr>
