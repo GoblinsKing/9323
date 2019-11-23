@@ -89,7 +89,8 @@ class LoginHome extends Component {
 		const { token,  userInfo, } = this.props;
 		const { generalComment } = this.state;
  		if (this.props.courseThreads){
-			return this.props.courseThreads.map((item)=>{
+ 			let reverseCourseThreads = this.props.courseThreads.reverse()
+			return reverseCourseThreads.map((item)=>{
 				return (
 					//  format general info
 					<div key={item.get('id')} className="generalInfo">

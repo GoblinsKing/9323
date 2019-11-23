@@ -91,7 +91,8 @@ class Course extends Component {
 
 	show_notice(notices){
 		if (notices) {
-			return notices.map((item) => {
+			let reverseNotices = notices.reverse()
+			return reverseNotices.map((item) => {
 				if (item.get("course_id") === this.state.course_id){
 					return (
 						<div className="noticeInfo" key={item.get('id')}>
