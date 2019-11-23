@@ -278,6 +278,11 @@ export const createNewGroup = (token, currentAssignmentID, createGroupTitle, cre
 	}
 };
 
+export const notMatchHint = (data) => ({
+	type: constants.GET_NOT_MATCH_HINT,
+	notMatchHints: fromJS(data)
+});
+
 // match一个group
 export const matchGroup = (token, currentAssignmentID, matchGroupPreTopic, matchFront, matchBack) => {
 	const URL = baseURL + '/group/match';
@@ -296,11 +301,18 @@ export const matchGroup = (token, currentAssignmentID, matchGroupPreTopic, match
 	};
 	return (dispatch) => {
 		axios.post(URL, sendData, AxiosConfig).then((res) => {
+
 			console.log(res)
 			// match group后，重新获取所有group的信息
-			dispatch(getAllGroupInfo(token, currentAssignmentID));
-		}).catch(() => {
-			console.log('Match Group Failure!');
+			if (res.status === 200) {
+				if (res.data.message === "success") {
+					dispatch(getAllGroupInfo(token, currentAssignmentID));
+				} else {
+					dispatch(notMatchHint(res.data.message));
+				}
+			} else {
+				dispatch(notMatchHint("Match Group Failure"));
+			}
 		})
 	}
 };

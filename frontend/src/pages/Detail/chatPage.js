@@ -23,7 +23,9 @@ class ChatPage extends Component {
 			groupInputValue: '',
 			public_modal_status: false,
 			group_modal_status: false,
-			searchKeyWord: ''
+			searchKeyWord: '',
+			showPublicChatRoom: true,
+			showGroupChatRoom: false
 		};
 	}
 
@@ -127,67 +129,87 @@ class ChatPage extends Component {
         )
 	}
 
+	chatPagePublic(){
+		const { token, publicChatRoomID, PublicMessages } = this.props;
+		return (
+			// public channel 
+			<div className="chatPageLeft">
+				<div className="chatHeader">
+					<span className="switchChannel public"  onClick={() => {this.setState({showPublicChatRoom: false, showGroupChatRoom: true})}}>Group</span>
+					Public Chatting Room
+					<span className="iconfont searchIcon" onClick={()=>{this.setState({public_modal_status: true})}}>&#xeafe;</span>
+				</div>
+				<div className="chatRoom" >
+					{/* public messages */}
+					{ this.handleChatMessage(PublicMessages)}
+
+					{/* chat message auto up */}
+					<div style={{ float:"left", clear: "both" }}
+						ref={(el) => { this.publicMessagesEnd = el; }}>
+					</div>
+
+				</div>
+				<input placeholder="Enter" 
+					value={ this.state.publicInputValue }  
+					onChange={(e) => this.setState({ publicInputValue: e.target.value })}
+					onKeyUp={this.handlePublicKeyUp}>
+				</input>
+				<button className="publicButton" 
+						onClick={() => { this.props.sendPublicMessage(token, publicChatRoomID.get("chat_room_id"), this.state.publicInputValue); 
+										this.setState({ publicInputValue: '' }) }}>Send
+				</button>
+			</div>
+		)
+	}
+
+	chatPageGroup(){
+		const { token, groupChatRoomID, GroupMessages } = this.props;
+		return (
+			// group channel
+			<div className="chatPageRight">
+				<div className="chatHeader Group">
+					<span className="switchChannel group" onClick={() => {this.setState({showGroupChatRoom: false, showPublicChatRoom: true})}}>Public</span>
+					Group Chatting Room
+					<span className="iconfont searchIcon" onClick={() => {this.setState({group_modal_status: true})}}>&#xeafe;</span>
+				</div>
+				<div className="chatRoom">
+					{/* group messages */}
+					{ this.handleChatMessage(GroupMessages)}
+
+					{/* chat message auto up */}
+					<div style={{ float:"left", clear: "both" }}
+						ref={(el) => { this.publicMessagesEnd = el; }}>
+					</div>
+
+				</div>
+				<input placeholder="Enter" 	
+					value={ this.state.groupInputValue  }  
+					onChange={(e) => this.setState({ groupInputValue: e.target.value })}
+					onKeyUp={this.handleGroupKeyUp}>
+				</input>
+				
+				{/* after created group */}
+				<button onClick={() => { groupChatRoomID ? this.props.sendGroupMessage(token, groupChatRoomID.get("chat_room_id"), this.state.groupInputValue) : this.setState({ groupInputValue: '' }) ;
+										this.setState({ groupInputValue: '' }) }}>Send
+				</button>
+			</div>
+		)
+	}
+
 	chatPage() {
-		const { token, publicChatRoomID, groupChatRoomID,
-				PublicMessages, GroupMessages } = this.props;
 		return (
 			<ShowChatPage>
-				{/* public channel */}
-				<div className="chatPageLeft">
-					<div className="chatHeader">
-						Public Chatting Room
-						<span className="iconfont searchIcon" onClick={()=>{this.setState({public_modal_status: true})}}>&#xeafe;</span>
-					</div>
-					<div className="chatRoom" >
-						{/* public message s */}
-						{ this.handleChatMessage(PublicMessages)}
+				{ this.state.showPublicChatRoom ? this.chatPagePublic() : this.chatPageGroup()}
 
-						{/* chat message auto up */}
-						<div style={{ float:"left", clear: "both" }}
-			             	ref={(el) => { this.publicMessagesEnd = el; }}>
-			        	</div>
+				{/* <div className="chatPageMiddle"></div> */}
 
-					</div>
-					<input placeholder="Enter" 
-						   value={ this.state.publicInputValue }  
-						   onChange={(e) => this.setState({ publicInputValue: e.target.value })}
-						   onKeyUp={this.handlePublicKeyUp}>
-					</input>
-					<button className="publicButton" 
-							onClick={() => { this.props.sendPublicMessage(token, publicChatRoomID.get("chat_room_id"), this.state.publicInputValue); 
-											 this.setState({ publicInputValue: '' }) }}>Send
-					</button>
-				</div>
-
-				<div className="chatPageMiddle"></div>
-
-				{/* group channel */}
-				<div className="chatPageRight">
-					<div className="chatHeader Group">
-						Group Chatting Room
-						<span className="iconfont searchIcon" onClick={()=>{this.setState({group_modal_status: true})}}>&#xeafe;</span>
-					</div>
-					<div className="chatRoom">
-						{/* group message*/}
-						{ this.handleChatMessage(GroupMessages)}
-
-					</div>
-					<input placeholder="Enter" 	
-						   value={ this.state.groupInputValue  }  
-						   onChange={(e) => this.setState({ groupInputValue: e.target.value })}
-						   onKeyUp={this.handleGroupKeyUp}>
-					</input>
-					
-					{/* after created group */}
-					<button onClick={() => { groupChatRoomID ? this.props.sendGroupMessage(token, groupChatRoomID.get("chat_room_id"), this.state.groupInputValue) : this.setState({ groupInputValue: '' }) ;
-											  this.setState({ groupInputValue: '' }) }}>Send
-					</button>
-				</div>
+				{/* search for public messages */}
 				{
 					this.state.group_modal_status?
 					this.message_search('Group'):
 					null
 				}
+				{/* search for group messages */}
 				{
 					this.state.public_modal_status?
 					this.message_search('Public'):

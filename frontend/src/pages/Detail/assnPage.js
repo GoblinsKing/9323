@@ -155,13 +155,15 @@ class AssnPage extends Component {
 				</div>
 			</AssignmentBlock>
 		)
-    }
+	}
     
     handleAssnThreads(){
 		const { token,  userInfo, } = this.props;
 		const { assnComment, course_id } = this.state;
 		if (this.props.courseThreads){
-			return this.props.courseThreads.map((item)=>{
+			//  sort Threads by time and upvotes
+			let sortThreads = helpers.sortThreads(this.props.courseThreads)
+			return sortThreads.map((item)=>{
 				return (
 					//  format threads
 					<div key={item.get('id')} className="generalInfo">

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import MenuBlock from './menuBlock';
 import { ContentWrapper, Nav, ShowGroupPage, CreateButton, GroupContent, ModalWrapper,
-			AssignmentType } from './style';
+	MatchGroupHint, AssignmentType } from './style';
 
 
 
@@ -59,6 +59,7 @@ class GroupPage extends Component {
 			join_group: false,
 			join_group_skill: '',
 			join_group_id: '',
+			match_group_fail: true,
 			course_id: course_id1,
 			currentAssignmentID: this.strMapToObj(this.props.assnInfo).id,
 		};
@@ -188,6 +189,34 @@ class GroupPage extends Component {
 					onClick = { () => { this.setState({ join_group: false }) }}
                 ></div>
             </ModalWrapper>
+        )
+	}
+
+	match_Group_Hint(){
+		return (
+            <MatchGroupHint>
+				
+                <div className="modal">
+					<div className="modal-post-notice">Match Group</div>
+                    <div className="modal-title">
+						<div className="title">{this.props.notMatchHints}</div>
+					</div>
+                    <div className="modal-operator">
+                        <button 
+                            className="modal-operator-button close"
+							onClick = { () => { this.setState({ match_group_fail: false }); this.props.clearMatchHint(null) }}
+                        >Cancel</button>
+                        <button 
+                            className="modal-operator-button confirm"
+							onClick = { () => { this.setState({ match_group_fail: false}); this.props.clearMatchHint(null) }}
+                        >Confirm</button>
+                    </div> 
+                </div>
+                <div 
+                    className="mask"
+					onClick = { () => { this.setState({ match_group_fail: false }); this.props.clearMatchHint(null) }}
+                ></div>
+            </MatchGroupHint>
         )
 	}
 
@@ -381,8 +410,13 @@ class GroupPage extends Component {
 				}
 				{
 					this.state.join_group ?  
-					this.confirm_join_group() :
-					null
+					this.confirm_join_group() : null
+				}
+
+				{/* if match group not success, some hints will show */}
+				{
+					(this.props.notMatchHints !== null && this.state.match_group_fail) ?
+					this.match_Group_Hint() : null
 				}
 				
 			</ShowGroupPage>
@@ -419,6 +453,7 @@ const mapState = (state) => {
 		groupInfo: state.getIn(["detail", "groupInfo"]),
 		groupDetailInfo: state.getIn(["detail", "groupDetailInfo"]),
 		allGroupInfo: state.getIn(["detail", "allGroupInfo"]),
+		notMatchHints: state.getIn(["detail", "notMatchHints"])
 	}
 };
 
@@ -434,6 +469,9 @@ const mapDispatch = (dispatch) => ({
 	},
 	matchGroup(token, currentAssignmentID, matchGroupPreTopic, matchFront, matchBack){
 		dispatch(actionCreators.matchGroup(token, currentAssignmentID, matchGroupPreTopic, matchFront, matchBack));
+	},
+	clearMatchHint(data){
+		dispatch(actionCreators.notMatchHint(data));
 	},
 	confirmJoinGroup(token, currentAssignmentID, join_group_skill, join_group_id){
 		dispatch(actionCreators.confirmJoinGroup(token, currentAssignmentID, join_group_skill, join_group_id));

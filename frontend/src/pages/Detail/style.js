@@ -135,7 +135,7 @@ export const ShowChatPage = styled.div`
 
 	.chatPageLeft{
 		float: left;
-		width: 550px;
+		width: 100%;
 	}
 	.chatPageMiddle{
 		float: left;
@@ -145,7 +145,7 @@ export const ShowChatPage = styled.div`
 	}
 	.chatPageRight{
 		float: right;
-		width: 550px;
+		width: 100%;
 	}
 	.chatHeader{
 		height: 40px;
@@ -153,14 +153,33 @@ export const ShowChatPage = styled.div`
 		font-size: 18px;
 		font-weight: bold;
 		text-align: center;
-		background-color: #13c2c2;
+		color: #fff;
+		background-color: #000;
 		&.Group{
-			color: #fff;
-			background-color: #000;
+			color: #000;
+			background-color: #13c2c2;
 		}
 		.searchIcon{
 			float: right;
 			margin-right: 20px;
+		}
+		.switchChannel{
+			width: 38px;
+			height: 38px;
+			border-radius: 19px;
+			color: #fff;
+			float: left;
+			font-size: 12px;
+			font-weight: normal;
+			margin-top: 1px;
+			margin-left: 2px;
+			&.public{
+				background-color: #1d39c4;
+			}
+			&.group{
+				color: #fff;
+				background-color: #000;
+			}
 		}
 	}
 	.chatRoom{
@@ -171,7 +190,7 @@ export const ShowChatPage = styled.div`
 		overflow: auto;
 	}
 	input{
-		width: 400px;
+		width: 990px;
 		height: 40px;
 		padding: 5px 10px;
 		box-sizing: border-box;
@@ -187,16 +206,16 @@ export const ShowChatPage = styled.div`
 		height: 40px;
 		padding: 5px 0;
 		box-sizing: border-box;
-		color: #fff;
+		color: #000;
 		font-size: 18px;
 		font-weight: bold;
 		margin-top: 10px;
 		line-height: 30px;
 		border-radius: 8px;
-		background-color: #000;
+		background-color: #13c2c2;
 		&.publicButton{
-			color: #000;
-			background-color: #13c2c2;
+			color: #fff;
+			background-color: #000;
 		}
 	}
 
@@ -1034,7 +1053,8 @@ export const SearchModalWrapper = styled.div`
 		line-height: 35px;
 		.publicSearch{
 			padding: 0;
-			background: #2f54eb;
+			color: #fff;
+			background: #000;
 			display: inline-block;
 			width: 100px;
 			height: 34px;
@@ -1086,5 +1106,83 @@ export const SearchModalWrapper = styled.div`
 		background: #000;
 		opacity: .6;
 		z-index: 9996;
+	}
+`
+
+
+export const MatchGroupHint = styled.div`
+	.modal {
+		position: fixed;
+		width: 400px;
+		height: 200px;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: 100px auto;
+		border-radius: 5px;
+		background: #f5f5f5;
+		overflow: hidden;
+		z-index: 9999;
+		box-shadow: inset 0 0 1px 0 #000;
+	}
+	.modal-post-notice{
+		background: #1890ff;
+		width: 100%;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		font-weight: bold;
+	}
+	.modal-title {
+		font-size: 14px;
+		margin: 20px 50px;
+		.title{
+			height: 25px;
+			line-height: 25px;	
+		}
+
+	}
+	
+	.modal-operator {
+		margin-top: 50px;
+		width: 100%;
+		height: 40px;
+		text-align: center
+	}
+	
+	.modal-operator-button{
+		border: none;
+		outline: none;
+		height: 30px;
+		line-height: 30px;
+		color: #fff;
+		font-size: 14px;
+		font-weight: bold;
+		background: #000;
+		cursor: pointer;
+		border-radius: 5px;
+	}
+	.close{
+		margin-right: 80px;
+	}
+	.confirm{
+
+	}
+	
+	.modal-operator-close:active, .modal-operator-confirm:active {
+		opacity: .6;
+		transition: opacity .3s;
+	}
+	
+	.mask {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: #000;
+		opacity: .6;
+		z-index: 9998;
 	}
 `
