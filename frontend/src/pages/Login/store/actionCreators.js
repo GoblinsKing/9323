@@ -40,10 +40,10 @@ export const login = (account, password) => {
 	};
 	const loginData = {"zid": account, "password": password}
 	return (dispatch) => {
-		// 登录验证post
+		// login auth post
 		axios.post(loginURL, loginData, loginAxiosConfig).then((res) => {
 			
-			// 获取用户信息get
+			// get user info
 			const userURL = baseURL + '/user/';
 			const AxiosConfig = {
 				headers: {
@@ -58,13 +58,13 @@ export const login = (account, password) => {
 				console.log("Get UserInfo Failure!");
 			});
 
-			// 获取enrollment信息get
+			// get enrollment info
 			const enrollmentURL = baseURL + '/user/enrolment';
 			axios.get(enrollmentURL, AxiosConfig).then((response) => {
 				const enrollmentData = response.data;
 				dispatch(getEnrollmentData(enrollmentData));
 
-				// 获取用户的课程get
+				// get user courses
 				var courseData = [];
 				enrollmentData.forEach(element => {
 					const url = baseURL + '/course/?course_id=' + element.course_id;

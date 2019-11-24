@@ -17,6 +17,7 @@ const groupTypes = [
 	{id: 6, type: "hw2"}
 ]
 
+
 class AssnPage extends Component {
 
 	constructor(props) {
@@ -75,6 +76,7 @@ class AssnPage extends Component {
 		// }) 
 	}
 
+	// post threads modal
 	post_Threads(){
 		const { course_id, threadTitle, threadContent } = this.state;
 		return (
@@ -116,6 +118,7 @@ class AssnPage extends Component {
         )
 	}
 
+	// assn page all details
 	assignmentPage(){
 		const { assnInfo } = this.props;
 		const { course_id } = this.state;
@@ -136,7 +139,7 @@ class AssnPage extends Component {
 					</Fragment>
 				}
 				<div className="taskBlock">
-					{/* 页面显示控制 */}
+					{/* shwo exist assn info or not */}
 					{  this.state.existAssnStatus ? 
 					  ( assnInfo ? (assnInfo.get("course_id") === course_id ? this.existAssnInfo(assnInfo) : null) : null) : 
 					   this.assnCreate() }
@@ -159,7 +162,8 @@ class AssnPage extends Component {
 			</AssignmentBlock>
 		)
 	}
-    
+	
+	// threads module
     handleAssnThreads(){
 		const { token,  userInfo, } = this.props;
 		const { assnComment, course_id } = this.state;
@@ -323,7 +327,6 @@ class AssnPage extends Component {
 
 	componentDidMount(){
 		this.props.getThreads(this.props.token, this.state.course_id);
-		// this.props.getThreadComments(this.props.token, thread_id);
 	}
 }
 

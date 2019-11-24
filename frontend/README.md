@@ -6,8 +6,8 @@
 
 ### Requirements
 - node and npm   
-If Node and Npm is not installed on your computer,   
-please check this [Website](https://nodejs.org/en/) for Node installation.
+If node or npm is not installed on your computer,   
+please check this [Website](https://nodejs.org/en/) for node installation.
 
 ### Install Dependencies
 ```

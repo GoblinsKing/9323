@@ -58,7 +58,7 @@ export const getChatRoomID_public = (token, chanel, course_id) => {
 		axios.get(chatUrl , AxiosConfig).then((res) => {
 			console.log(res)
 			dispatch(getPublicChatRoomID(res.data));
-			// 获取到public chat_room_id后, get public messages
+			// after group chat_room_id, get public chat messages again
 			const URL = baseURL + '/chat/message?chat_room_id=' + res.data.chat_room_id;
 			axios.get(URL, AxiosConfig).then((res1) => {
 				console.log(res1)
@@ -86,7 +86,7 @@ export const getChatRoomID_group = (token, chanel, course_id) => {
 		axios.get(chatUrl, AxiosConfig).then((res) => {
 			console.log(res)
 			dispatch(getGroupChatRoomID(res.data));
-			// 获取到group chat_room_id后, 获取group聊天室数据
+			// after group chat_room_id, get group chat messages again or clear GroupMessages
 			if (res.data) {
 				const URL = baseURL + '/chat/message?chat_room_id=' + res.data.chat_room_id;
 				axios.get(URL, AxiosConfig).then((res1) => {
@@ -105,7 +105,7 @@ export const getChatRoomID_group = (token, chanel, course_id) => {
 	}
 };
 
-// 聊天室发送信息public
+// sen public message
 export const sendPublicMessage = (token, chat_room_id, message) => {
 	const URL = baseURL + '/chat/message';
 	const AxiosConfig = {
@@ -122,7 +122,7 @@ export const sendPublicMessage = (token, chat_room_id, message) => {
 	return (dispatch) => {
 		axios.post(URL, sendData, AxiosConfig).then((res) => {
 			console.log(res)
-			// 发送成功后重新获取public数据
+			// if success, refresh public messages
 			const config = {
 				headers: {
 					"accept": "application/json",
@@ -283,7 +283,7 @@ export const createNewGroup = (token, currentAssignmentID, createGroupTitle, cre
 };
 
 
-// match一个group
+// match a group
 export const matchGroup = (token, currentAssignmentID, matchGroupPreTopic, matchFront, matchBack) => {
 	const URL = baseURL + '/group/match';
 	const AxiosConfig = {
@@ -303,7 +303,7 @@ export const matchGroup = (token, currentAssignmentID, matchGroupPreTopic, match
 		axios.post(URL, sendData, AxiosConfig).then((res) => {
 
 			console.log(res)
-			// match group后，重新获取所有group的信息
+			// after match group后，reget all group info
 			if (res.status === 200) {
 				if (res.data.message === "success") {
 					dispatch(getAllGroupInfo(token, currentAssignmentID));
@@ -462,6 +462,7 @@ const getDetailResource = (data) => ({
 	courseResourceDetail: fromJS(data)
 });
 
+//  getResourceDetail 
 export const getResourceDetail = (resource_id) => {
 	const URL = baseURL + '/course/resource?resource_id=' + resource_id;
 	const AxiosConfig = {
@@ -511,7 +512,7 @@ const getCourseThreads = (data) => ({
 	courseThreads: fromJS(data)
 });
 
-//  get课程threads
+//  get course threads
 export const getThreads = (token, course_id) => {
 	const URL = baseURL + '/thread/course?course_id=' + course_id;
 	const AxiosConfig = {
@@ -608,12 +609,7 @@ export const postThreadComments = (token, thread_id, content, publisher_id, cour
 	}
 };
 
-// const getUpvotes = (data) => ({
-// 	type: constants.GET_UPVOTES,
-// 	currentUpvotes: data
-// });
-// upVoteThread
-
+// upVote Thread
 export const upVoteThread = (token, course_id, thread_id) => {
 	const URL = baseURL + '/thread/up_vote?thread_id=' + thread_id;
 	return (dispatch) => {

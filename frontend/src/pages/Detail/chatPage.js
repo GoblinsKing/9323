@@ -38,8 +38,8 @@ class ChatPage extends Component {
 						const user_id = item.get("user_id");
 						const message = item.get("message");
 						if ( user_id === this.props.userInfo.get("id")) {
-							// if message的user_id ==== this.props.userInfo.get("id") then right float，other left float
-							// use flexbox
+							// if message user_id ==== this.props.userInfo.get("id") then right float，other left float
+							// use flexbox for layout
 							return (
 								<div key={item.get("id")} className="myMessage">
 									<div className="myName">{ item.get("user_name") }</div>
@@ -79,6 +79,7 @@ class ChatPage extends Component {
 		}
 	}
 
+	// for chat message scroll up auto
 	scrollToBottom(){
 		  this.publicMessagesEnd.scrollIntoView({ behavior: "smooth" });
 	}

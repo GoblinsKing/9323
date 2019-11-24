@@ -13,6 +13,7 @@ import assnImage from '../../statics/coursePages/assn.png';
 import lectureImage from '../../statics/coursePages/lecture.png';
 
 
+// common component in all detail pages
 class MenuBlock extends Component {
 	
 	detailContentHeader() {

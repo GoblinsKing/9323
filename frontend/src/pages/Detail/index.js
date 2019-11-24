@@ -17,6 +17,7 @@ class Detail extends Component {
 		const whichCourse = this.props.match.params.id;
 		const whichPage = this.props.match.params.detail;
 		this.props.matchParams(whichCourse, whichPage);
+		// according whichPage, route to different Component
 		if (this.props.loginStatus) {
 			if (whichPage === "staff") {
 				return (
