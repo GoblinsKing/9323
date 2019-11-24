@@ -9,7 +9,7 @@ If Node and Npm is not installed on your computer, please check this [Website](h
 
 #### 2.Running the Backend on your Own Machine
 
-You can create virtual env with conda [recommended].
+You can create virtual env with conda [recommended].<br>
 If conda is not installed on your computer, please check this [Website](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) for conda installation.
 ```bash
     conda create -n COMP9323 python=3.6
@@ -69,6 +69,7 @@ You can view **backend** source code in and editor like Sublime or VSCode.
 backend:
   >apis               # All api code
   >db                 # Initialization data
+  >util               # API models and help functions
   - requirement.txt   # Relevant Python packages
   - run.py            # The entrypoint for backend sever
 
