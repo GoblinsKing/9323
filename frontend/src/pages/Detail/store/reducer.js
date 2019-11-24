@@ -13,7 +13,6 @@ const defaultState = fromJS({
 	searchMessages: null,
 	groupDetailInfo: [],
 	allGroupInfo: [],
-	notMatchHints: null,
 	courseStaffInfo: [],
 	courseResourceInfo: [],
 	courseResourceDetail: [],
@@ -49,8 +48,6 @@ export default (state = defaultState, action) => {
 			return state.set('groupDetailInfo', action.groupDetailInfo);
 		case constants.GET_ALL_GROUP_INFO:
 			return state.set('allGroupInfo', action.allGroupInfo);
-		case constants.GET_NOT_MATCH_HINT:
-			return state.set('notMatchHints', action.notMatchHints);
 			
 		case constants.COURSE_STAFF_INFO:
 			return state.set('courseStaffInfo', action.courseStaffInfo);

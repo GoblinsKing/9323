@@ -52,6 +52,9 @@ class AssnPage extends Component {
 		let end_time = new Date(due_date).getTime();
 		let now_time = new Date().getTime();
 		let leftTime = (end_time - now_time) / 86400000;
+		if (leftTime < 0){
+			leftTime = 0;
+		}
 		return Math.round(leftTime);
 	}
 

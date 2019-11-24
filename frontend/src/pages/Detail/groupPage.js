@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import MenuBlock from './menuBlock';
-import { ContentWrapper, Nav, ShowGroupPage, CreateButton, GroupContent, ModalWrapper,
-	MatchGroupHint, AssignmentType } from './style';
+import { ContentWrapper, Nav, ShowGroupPage, CreateButton, GroupContent, 
+	ModalWrapper, AssignmentType } from './style';
 
 
 
@@ -47,11 +47,9 @@ class GroupPage extends Component {
 			createButtonStatus: false,
 			matchButtonStatus: false,
 			createGroupTitle: '',
-			// createGroupType: groupTypes[0]["id"],
 			createGroupPreTopic: assnAllTopics[0],
 			createFront: levels[0]["id"],
 			createBack: levels[0]["id"],
-			// matchGroupType: groupTypes[0]["id"],
 			matchGroupPreTopic: assnAllTopics[0],
 			matchFront: levels[0]["id"],
 			matchBack: levels[0]["id"],
@@ -59,7 +57,6 @@ class GroupPage extends Component {
 			join_group: false,
 			join_group_skill: '',
 			join_group_id: '',
-			match_group_fail: true,
 			course_id: course_id1,
 			currentAssignmentID: this.strMapToObj(this.props.assnInfo).id,
 		};
@@ -192,35 +189,6 @@ class GroupPage extends Component {
         )
 	}
 
-	match_Group_Hint(){
-		return (
-            <MatchGroupHint>
-				
-                <div className="modal">
-					<div className="modal-post-notice">Match Group</div>
-                    <div className="modal-title">
-						<div className="title">{this.props.notMatchHints}</div>
-					</div>
-                    <div className="modal-operator">
-                        <button 
-                            className="modal-operator-button close"
-							onClick = { () => { this.setState({ match_group_fail: false }); this.props.clearMatchHint(null) }}
-                        >Cancel</button>
-                        <button 
-                            className="modal-operator-button confirm"
-							onClick = { () => { this.setState({ match_group_fail: false}); this.props.clearMatchHint(null) }}
-                        >Confirm</button>
-                    </div> 
-                </div>
-                <div 
-                    className="mask"
-					onClick = { () => { this.setState({ match_group_fail: false }); this.props.clearMatchHint(null) }}
-                ></div>
-            </MatchGroupHint>
-        )
-	}
-
-	
 
 	groupCreate() {
 		return(
@@ -287,9 +255,8 @@ class GroupPage extends Component {
 				
 					</div>
 					<CreateButton className="confirm" 
-						onClick={ () => { this.changeAllButtonStatus();
-						this.props.createNewGroup(this.props.token, this.state.currentAssignmentID, this.state.createGroupTitle,
-													this.state.createGroupPreTopic, this.state.createFront, this.state.createBack) }}>
+						onClick={ () => { this.state.createGroupTitle ? this.props.createNewGroup(this.props.token, this.state.currentAssignmentID, this.state.createGroupTitle,
+									this.state.createGroupPreTopic, this.state.createFront, this.state.createBack) : alert("Please Input Group Title");  this.changeAllButtonStatus() }}>
 						Create
 					</CreateButton>
 				</div>
@@ -412,20 +379,12 @@ class GroupPage extends Component {
 					this.state.join_group ?  
 					this.confirm_join_group() : null
 				}
-
-				{/* if match group not success, some hints will show */}
-				{
-					(this.props.notMatchHints !== null && this.state.match_group_fail) ?
-					this.match_Group_Hint() : null
-				}
-				
 			</ShowGroupPage>
 		)
     }
 	
 
-	render() {
-		
+	render() {	
         return (
             <ContentWrapper>
                 <Nav>
@@ -469,9 +428,6 @@ const mapDispatch = (dispatch) => ({
 	},
 	matchGroup(token, currentAssignmentID, matchGroupPreTopic, matchFront, matchBack){
 		dispatch(actionCreators.matchGroup(token, currentAssignmentID, matchGroupPreTopic, matchFront, matchBack));
-	},
-	clearMatchHint(data){
-		dispatch(actionCreators.notMatchHint(data));
 	},
 	confirmJoinGroup(token, currentAssignmentID, join_group_skill, join_group_id){
 		dispatch(actionCreators.confirmJoinGroup(token, currentAssignmentID, join_group_skill, join_group_id));

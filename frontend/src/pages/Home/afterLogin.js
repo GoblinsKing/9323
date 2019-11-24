@@ -67,17 +67,15 @@ class LoginHome extends Component {
         )
 	}
 
+
 	handleCourseTable(){
 		if (this.props.courseList) {
 			return this.props.courseList.map((item)=>{
 				return (
-				<tr key={item.get('code')}>
+				<tr key={item.get('id')}>
 					<td>
-						<Link to={`/${item.get("code")}`} key={item.get("id")}>
-							<div 
-								className="courseCode" 
-								onClick={() => { this.setState({currentCourseCode: item.get("code")}) }}
-							>{ item.get("code") }</div>
+						<Link to={`/${item.get("code")}`}>
+							<div className="courseCode" >{ item.get("code") }</div>
 						</Link>																			
 						{item.get('title')}															
 					</td>
@@ -91,7 +89,7 @@ class LoginHome extends Component {
 		const { token,  userInfo, } = this.props;
 		const { generalComment } = this.state;
  		if (this.props.courseThreads){
- 			let reverseCourseThreads = this.props.courseThreads.reverse()
+			let reverseCourseThreads = this.props.courseThreads.reverse()
 			return reverseCourseThreads.map((item)=>{
 				return (
 					//  format general info

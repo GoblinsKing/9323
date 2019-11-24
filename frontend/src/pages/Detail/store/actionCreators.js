@@ -87,13 +87,17 @@ export const getChatRoomID_group = (token, chanel, course_id) => {
 			console.log(res)
 			dispatch(getGroupChatRoomID(res.data));
 			// 获取到group chat_room_id后, 获取group聊天室数据
-			const URL = baseURL + '/chat/message?chat_room_id=' + res.data.chat_room_id;
-			axios.get(URL, AxiosConfig).then((res1) => {
-				console.log(res1)
-				dispatch(getGroupChatMessage(res1.data));
-			}).catch(() => {
-				console.log('Get Group Message Failure!');
-			})
+			if (res.data) {
+				const URL = baseURL + '/chat/message?chat_room_id=' + res.data.chat_room_id;
+				axios.get(URL, AxiosConfig).then((res1) => {
+					console.log(res1)
+					dispatch(getGroupChatMessage(res1.data));
+				}).catch(() => {
+					console.log('Get Group Message Failure!');
+				})
+			} else {
+				dispatch(getGroupChatMessage(null));
+			}
 		}).catch(() => {
 			console.log('getChatRoomID_group Failure!');
 		})
@@ -278,10 +282,6 @@ export const createNewGroup = (token, currentAssignmentID, createGroupTitle, cre
 	}
 };
 
-export const notMatchHint = (data) => ({
-	type: constants.GET_NOT_MATCH_HINT,
-	notMatchHints: fromJS(data)
-});
 
 // match一个group
 export const matchGroup = (token, currentAssignmentID, matchGroupPreTopic, matchFront, matchBack) => {
@@ -308,10 +308,10 @@ export const matchGroup = (token, currentAssignmentID, matchGroupPreTopic, match
 				if (res.data.message === "success") {
 					dispatch(getAllGroupInfo(token, currentAssignmentID));
 				} else {
-					dispatch(notMatchHint(res.data.message));
+					alert(res.data.message);
 				}
 			} else {
-				dispatch(notMatchHint("Match Group Failure"));
+				alert("Match Group Failure");
 			}
 		})
 	}
@@ -356,6 +356,7 @@ export const confirmLeaveGroup = (token, currentAssignmentID, groupId) => {
 	}
 };
 // ########################################################################
+
 // put new assn
 export const putNewAssn = (token, course_id, assnTitle, publish_date, due_date, group_size, all_topics, content) => {
 	const URL = baseURL + '/course/assignment';
@@ -391,7 +392,7 @@ const getStaffInfo = (data) => ({
 	courseStaffInfo: fromJS(data)
 });
 
-// 获取课程staff信息
+// get course staff info
 export const getCourseStaffInfo = (token, course_id) => {
 	const URL = baseURL + '/course/staff?course_id=' + course_id;
 	const AxiosConfig = {
@@ -400,9 +401,9 @@ export const getCourseStaffInfo = (token, course_id) => {
 		}
 	};
 	return (dispatch) => {
-		// 返回id, lecturer_id, course_id, term 数组
+		// return [id, lecturer_id, course_id, term] array
 		axios.get(URL, AxiosConfig).then((res) => {
-			// 接着匹配出staff详细信息
+			// then match staff detail info
 			const config = {
 				headers: {
 					"accept": "application/json",
@@ -418,12 +419,12 @@ export const getCourseStaffInfo = (token, course_id) => {
 			});
 			Promise.all(promises).then((val) => {
 				val.forEach((item) => { 
-					// console.log(item)
 					courseStaffDetail.push(item.data); 
 				})
 			}).catch(() => {
 				console.log("getCourseStaffDetail Failure!");
 			});
+			console.log(courseStaffDetail)
 			dispatch(getStaffInfo(courseStaffDetail));
 
 		}).catch(() => {

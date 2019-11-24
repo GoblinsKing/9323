@@ -42,14 +42,14 @@ class ChatPage extends Component {
 							// use flexbox
 							return (
 								<div key={item.get("id")} className="myMessage">
-									<div className="myName">{ user_id }</div>
+									<div className="myName">{ item.get("user_name") }</div>
 									<div className="myMessageContent">{ message }</div>
 								</div>
 							)
 						} else {
 							return (
 								<div key={item.get("id")} className="othersMessage">
-									<div className="othersName">{ user_id }</div>
+									<div className="othersName">{  item.get("user_name") }</div>
 									<div className="othersMessageContent">{ message }</div>
 								</div>
 							)
@@ -73,6 +73,8 @@ class ChatPage extends Component {
 			if (this.props.groupChatRoomID) {
 				this.props.sendGroupMessage(this.props.token, this.props.groupChatRoomID.get("chat_room_id"), this.state.groupInputValue);
 				this.setState({ groupInputValue: '' })
+			} else {
+				alert("No Group Now")
 			}
 		}
 	}
@@ -189,7 +191,7 @@ class ChatPage extends Component {
 				</input>
 				
 				{/* after created group */}
-				<button onClick={() => { groupChatRoomID ? this.props.sendGroupMessage(token, groupChatRoomID.get("chat_room_id"), this.state.groupInputValue) : this.setState({ groupInputValue: '' }) ;
+				<button onClick={() => { groupChatRoomID ? this.props.sendGroupMessage(token, groupChatRoomID.get("chat_room_id"), this.state.groupInputValue) : alert("No Group Now") ;
 										this.setState({ groupInputValue: '' }) }}>Send
 				</button>
 			</div>
@@ -236,12 +238,9 @@ class ChatPage extends Component {
 	}
 	
 	componentDidMount() {
-		this.interval = setInterval(() => this.refreshChatMessage(), 2000);
+		this.interval = setInterval(() => this.refreshChatMessage(), 2500);
 		this.refreshChatMessage();
 		this.scrollToBottom();
-		let key_word = "hi";
-		let chat_room_id = 1;
-		this.props.searchChatMessage(this.props.token, key_word, chat_room_id);
 	}
 
 	componentDidUpdate() {

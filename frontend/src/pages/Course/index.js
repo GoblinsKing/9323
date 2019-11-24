@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
 import * as helpers from '../../helpers.js';
+import { actionCreators as DetailActionCreators } from '../../pages/Detail/store';
 import { ContentWrapper, Nav, ContentHeader, MenuButton, 
 	ContentMenu, PostButton, ContentNotice, ContentDue, ModalWrapper } from './style';
 
@@ -44,6 +45,9 @@ class Course extends Component {
 		let end_time = new Date(due_date).getTime();
 		let now_time = new Date().getTime();
 		let rate = Math.round((now_time - start_time) / (end_time - start_time) * 100);
+		if (rate > 100) {
+			rate = 100;
+		}
 		return String(rate) + "%";
 	}
 
@@ -231,6 +235,7 @@ class Course extends Component {
 	componentDidMount(){
 		this.props.getAssnInfo(this.props.token, this.state.course_id);	
 		this.props.getCourseNotice(this.state.course_id);
+		this.props.getCourseStaffInfo(this.props.token, this.state.course_id);
 	}
 
 
@@ -246,6 +251,7 @@ class Course extends Component {
 		});
 		this.setState({course_id: course_id1})
 		if (this.props !== nextProps) {
+			// if course id has changed, get assnInfo and CourseNotice again
 			if(this.props.match.params.id !== nextProps.match.params.id) {
 				this.props.getAssnInfo(this.props.token, course_id1);	
 				this.props.getCourseNotice(course_id1);
@@ -278,6 +284,9 @@ const mapDispatch = (dispatch) => ({
 	},
 	postCourseNotice(token, course_id, title, content, publisher_id){
 		dispatch(actionCreators.postCourseNotice(token, course_id, title, content, publisher_id));
+	},
+	getCourseStaffInfo(token, course_id) {
+		dispatch(DetailActionCreators.getCourseStaffInfo(token, course_id));
 	}
 
 });

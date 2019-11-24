@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { actionCreators } from './store';
+// import { actionCreators } from './store';
 import MenuBlock from './menuBlock';
 import { ContentWrapper, Nav, StaffTable } from './style';
 
 
 const staffInfo2 = [
-	{id: 1, role: "Lecturer", name: "Tom", email: "z1234560@unsw.edu"},
-	{id: 2, role: "Admin", name: "John", email: "z1234561@unsw.edu"},
-	{id: 3, role: "Tutor", name: "Helen", email: "z1234562@unsw.edu"},
-	{id: 4, role: "Tutor", name: "Lisa", email: "z1234563@unsw.edu"},
-	{id: 5, role: "Tutor", name: "Anna", email: "z1234564@unsw.edu"}
+	{id: 1, role: "Lecturer", name: "Kate Grenville", email: "z5100009@unsw.edu.au"},
+	{id: 2, role: "Lecturer", name: "Alice Grenville", email: "z5100034@unsw.edu.au"},
+	{id: 3, role: "Tutor", name: "Peter Snow", email: "z5100039@unsw.edu.au"},
+	{id: 4, role: "Tutor", name: "Lisa", email: "z5100086@unsw.edu.au"},
+	{id: 5, role: "Tutor", name: "Anna", email: "z5100098@unsw.edu.au"}
 ]
 
 
@@ -27,8 +27,9 @@ class StaffPage extends Component {
 		});
 
 		this.state = { 
-			course_id: course_id1
+			course_id: course_id1,
 		};
+
 	}
 
 	staffTable(){
@@ -57,14 +58,15 @@ class StaffPage extends Component {
 	}
 
 	// staffTable(){
-	// 	const { courseStaffInfo } = this.props;
-	// 	if (courseStaffInfo) {
+	// 	if (this.props.courseStaffInfo) {
+	// 		console.log("######")
+	// 		console.log(this.props.courseStaffInfo)
 	// 		return (
 	// 			<StaffTable>
 	// 				<thead>
 	// 					<tr><th>Role</th><th>Name</th><th>Email</th></tr>
 	// 				</thead>
-	// 				<tbody>{courseStaffInfo.map((item) => {
+	// 				<tbody>{this.props.courseStaffInfo.map((item) => {
 	// 					return (
 	// 						<tr key={item.get("id")}>
 	// 							<td>{item.get("role")}</td>
@@ -89,7 +91,7 @@ class StaffPage extends Component {
 	}
 	
 	componentDidMount(){
-		this.props.getCourseStaffInfo(this.props.token, this.state.course_id);
+		// this.props.getCourseStaffInfo(this.props.token, this.state.course_id);
 	}
 
 }
@@ -105,9 +107,9 @@ const mapState = (state) => {
 };
 
 const mapDispatch = (dispatch) => ({
-	getCourseStaffInfo(token, course_id) {
-		dispatch(actionCreators.getCourseStaffInfo(token, course_id));
-	}
+	// getCourseStaffInfo(token, course_id) {
+	// 	dispatch(actionCreators.getCourseStaffInfo(token, course_id));
+	// }
 });
 
 
