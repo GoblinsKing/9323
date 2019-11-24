@@ -10,7 +10,7 @@ from .thread import api as thread
 api = Api(
     title='Uni-Learn API',
     version='2.0',
-    description='An API backend'
+    description='An API backend used for the Uni-Learn System'
     # All API metadatas
 )
 
