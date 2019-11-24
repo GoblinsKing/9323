@@ -1,18 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import { actionCreators } from './store';
+import { actionCreators } from './store';
 import MenuBlock from './menuBlock';
 import { ContentWrapper, Nav, StaffTable } from './style';
-
-
-const staffInfo2 = [
-	{id: 1, role: "Lecturer", name: "Kate Grenville", email: "z5100009@unsw.edu.au"},
-	{id: 2, role: "Lecturer", name: "Alice Grenville", email: "z5100034@unsw.edu.au"},
-	{id: 3, role: "Tutor", name: "Peter Snow", email: "z5100039@unsw.edu.au"},
-	{id: 4, role: "Tutor", name: "Lisa", email: "z5100086@unsw.edu.au"},
-	{id: 5, role: "Tutor", name: "Anna", email: "z5100098@unsw.edu.au"}
-]
-
 
 class StaffPage extends Component {
 
@@ -33,7 +23,7 @@ class StaffPage extends Component {
 	}
 
 	staffTable(){
-		if (staffInfo2) {
+		if (this.props.courseStaffInfo) {
 			return (
 				<StaffTable>
 					<thead>
@@ -41,12 +31,12 @@ class StaffPage extends Component {
 					</thead>
 					<tbody>
 						{
-						staffInfo2.map((item) => {
+						this.props.courseStaffInfo.map((item) => {
 							return (
-								<tr key={item.id}>
-									<td>{item.role}</td>
-									<td>{item.name}</td>
-									<td>{item.email}</td>
+								<tr key={item.get("id")}>
+									<td>{item.get("role")}</td>
+									<td>{item.get("user_name")}</td>
+									<td>{item.get("email")}</td>
 								</tr>
 							)
 						})
@@ -56,28 +46,6 @@ class StaffPage extends Component {
 			)
 		}
 	}
-
-	// staffTable(){
-	// 	if (this.props.courseStaffInfo) {
-	// 		console.log("######")
-	// 		console.log(this.props.courseStaffInfo)
-	// 		return (
-	// 			<StaffTable>
-	// 				<thead>
-	// 					<tr><th>Role</th><th>Name</th><th>Email</th></tr>
-	// 				</thead>
-	// 				<tbody>{this.props.courseStaffInfo.map((item) => {
-	// 					return (
-	// 						<tr key={item.get("id")}>
-	// 							<td>{item.get("role")}</td>
-	// 							<td>{item.get("name")}</td>
-	// 							<td>{item.get("email")}</td>
-	// 						</tr>
-	// 				)})}</tbody>
-	// 			</StaffTable>
-	// 		)
-	// 	}
-	// }
 	
 	render() {
         return (
@@ -91,7 +59,7 @@ class StaffPage extends Component {
 	}
 	
 	componentDidMount(){
-		// this.props.getCourseStaffInfo(this.props.token, this.state.course_id);
+		this.props.getCourseStaffInfo(this.state.course_id);
 	}
 
 }
@@ -107,13 +75,10 @@ const mapState = (state) => {
 };
 
 const mapDispatch = (dispatch) => ({
-	// getCourseStaffInfo(token, course_id) {
-	// 	dispatch(actionCreators.getCourseStaffInfo(token, course_id));
-	// }
+	getCourseStaffInfo(course_id) {
+		dispatch(actionCreators.getCourseStaffInfo(course_id));
+	}
 });
 
 
 export default connect(mapState, mapDispatch)(StaffPage);
-
-
-

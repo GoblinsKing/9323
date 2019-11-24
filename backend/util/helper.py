@@ -96,11 +96,17 @@ def getResourceInfo(raw):
     }
 
 def getStaffInfo(raw):
+    session = db.get_session()
+    user = session.query(db.User).filter_by(id=raw.lecturer_id).first()
+    session.close()
     return{
             "id": raw.id,
             'lecturer_id': raw.lecturer_id,
             'course_id': raw.course_id,
-            'term': raw.term
+            'term': raw.term,
+            'user_name': user.name,
+            'email': user.email,
+            'role': user.role
     }
 
 def getThreadInfo(raw):

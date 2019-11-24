@@ -393,7 +393,7 @@ const getStaffInfo = (data) => ({
 });
 
 // get course staff info
-export const getCourseStaffInfo = (token, course_id) => {
+export const getCourseStaffInfo = (course_id) => {
 	const URL = baseURL + '/course/staff?course_id=' + course_id;
 	const AxiosConfig = {
 		headers: {
@@ -401,37 +401,15 @@ export const getCourseStaffInfo = (token, course_id) => {
 		}
 	};
 	return (dispatch) => {
-		// return [id, lecturer_id, course_id, term] array
 		axios.get(URL, AxiosConfig).then((res) => {
-			// then match staff detail info
-			const config = {
-				headers: {
-					"accept": "application/json",
-					"Authorization": token
-				}
-			};
-			let courseStaffDetail = [];
-			let promises = [];
-			res.data.forEach(element => {
-				const userURL = baseURL + '/user/?user_id=' + element.lecturer_id;
-				const result = axios.get(userURL, config);
-				promises.push(result);
-			});
-			Promise.all(promises).then((val) => {
-				val.forEach((item) => { 
-					courseStaffDetail.push(item.data); 
-				})
-			}).catch(() => {
-				console.log("getCourseStaffDetail Failure!");
-			});
-			console.log(courseStaffDetail)
-			dispatch(getStaffInfo(courseStaffDetail));
-
+			console.log(res)
+			dispatch(getStaffInfo(res.data))
 		}).catch(() => {
-			console.log('getCourseStaffInfo Failure!');
+			console.log('getStaffInfo Failure!');
 		})
 	}
 };
+
 
 const getResourceInfo = (data) => ({
 	type: constants.COURSE_RESOURCE_INFO,

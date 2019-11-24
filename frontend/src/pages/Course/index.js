@@ -235,7 +235,7 @@ class Course extends Component {
 	componentDidMount(){
 		this.props.getAssnInfo(this.props.token, this.state.course_id);	
 		this.props.getCourseNotice(this.state.course_id);
-		this.props.getCourseStaffInfo(this.props.token, this.state.course_id);
+		this.props.getCourseStaffInfo(this.state.course_id);
 	}
 
 
