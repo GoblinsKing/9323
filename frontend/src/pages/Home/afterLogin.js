@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { actionCreators } from './store';
 import { actionCreators as DetailActionCreators } from '../../pages/Detail/store';
-import * as helpers from '../../helpers.js';
+//import * as helpers from '../../helpers.js';
 import { ContentWrapper, Nav, NavItem, 
 	WelcomeBorder, Welcome,
 	NavLeft, NavRight, Comment, InputWindow, PostButton, ModalWrapper } from './style';
@@ -101,7 +101,7 @@ class LoginHome extends Component {
 						<div className="poster_time">
 							Post by
 							<span className="poster">{ item.get('publisher_name') }</span>
-							{ helpers.formatTime(new Date().getTime()) }
+							
 						</div>
 
 						<div className="actionAndIcon">	
@@ -146,7 +146,7 @@ class LoginHome extends Component {
 										<div className="poster_time">
 											Post by
 											<span className="poster">{this.props.userInfo.get('name')}</span>
-											{ helpers.formatTime(new Date().getTime()) }
+											
 										</div>	
 									</Comment>
 								)

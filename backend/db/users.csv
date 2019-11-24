@@ -1,16 +1,20 @@
-admin,admin,admin,SystemAdmin
-z5100000,eantio,student,Richie Benaud
-z5100001,pheawa,student,Lleyton Hewitt
-z5100002,ueacki,student,Slim Dusty
-z5100003,erdtat,student,Peter Allen
-z5100004,taylau,student,Brett Whitely
-z5100005,dowsid,student,Albert Namatjira
-z5100006,yozygr,student,Tracey Moffat
-z5100007,iongey,student,Max Dupain
-z5100008,olebra,student,Patrick White
-z5100009,heopen,lecturer,Kate Grenville
-z5100010,newilt,lecturer,Henry Lawson
-z5100011,editor,lecturer,Allan Border
-z5100012,happen,lecturer,Alice Grenville
-z5100013,thrown,lecturer,John Lawson
-z5100014,purple,lecturer,Peter Snow
+admin,admin,Admin,David Nguyen
+z5100000,eantio,Student,Richie Benaud
+z5100001,pheawa,Student,Lleyton Hewitt
+z5100002,ueacki,Student,Slim Dusty
+z5100003,erdtat,Student,Peter Allen
+z5100004,taylau,Student,Brett Whitely
+z5100005,dowsid,Student,Albert Namatjira
+z5100006,yozygr,Student,Tracey Moffat
+z5100007,iongey,Student,Max Dupain
+z5100008,olebra,Student,Patrick White
+z5100009,heopen,Lecturer,Boualem Benatallah
+z5100010,newilt,Lecturer,Tatjana Zrimec
+z5100011,editor,Lecturer,Allan Border
+z5100012,happen,Course Admin,Morty Al-Banna
+z5100013,thrown,Tutor,Ka Yee Wong
+z5100014,purple,Tutor,Xiaowei Zhou
+z5100015,yonghs,Lecturer,Michael Thielscher
+z5100016,tutsey,Course Admin,Michael Schofield
+z5100017,igonse,Tutor,Xingkai Tian
+z5100018,crryer,Tutor,Sahil Punchhi

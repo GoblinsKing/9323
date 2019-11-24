@@ -172,6 +172,7 @@ def init_db():
     init_resources(session)
     init_message(session)
     init_notices(session)
+    init_threads(session)
     # finish init
     session.close()
 
@@ -183,7 +184,7 @@ def init_user(session):
     with open('db/users.csv') as f:
         for line in f.readlines():
             line = line.strip().split(',')
-            user = User(zid=line[0], password=line[1], token='', role=line[2], name=line[3], email='email@gg.com')
+            user = User(zid=line[0], password=line[1], token='', role=line[2], name=line[3], email=line[0]+"@unsw.edu.au")
             if (user.role == "admin"):
                 user.token = '123'
             session.add(user)
@@ -250,4 +251,12 @@ def init_resources(session):
             line = line.strip().split(',')
             resource = Resource(course_id=line[0], title=line[1], group=line[2], content=line[3])
             session.add(resource)
+    session.commit()
+
+def init_threads(session):
+    with open('db/threads.csv') as f:
+        for line in f.readlines():
+            line = line.strip().split(',')
+            thread = Thread(course_id=line[0], title=line[1], up_vote=line[2], publisher_id=line[3], content=line[4])
+            session.add(thread)
     session.commit()
