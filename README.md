@@ -10,8 +10,9 @@ If Node and Npm is not installed on your computer, please check this [Website](h
 #### 2.Running the Backend on your Own Machine
 
 You can create virtual env with conda [recommended].
+If conda is not installed on your computer, please check this [Website](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) for conda installation.
 ```bash
-    conda create -n COMP9323 python=3.7
+    conda create -n COMP9323 python=3.6
     # create a virtual environment
     conda activate COMP9323
     #activate virtual environment
