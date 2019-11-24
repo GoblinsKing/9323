@@ -86,11 +86,22 @@ class Chatroom(Resource):
             chatroom = session.query(db.ChatRoom).filter_by(course_id=course_id).filter_by(channel=channel).first()
             session.close()
         else:
-            groupMember = session.query(db.GroupMember).filter_by(student_id=user.id).first()
-            if (groupMember is None):
+            assignments = session.query(db.Assignment)
+            for assignment in assignments:
+                if (assignment.course_id == course_id):
+                    break
+            groupMembers = session.query(db.GroupMember).filter_by(student_id=user.id).all()
+            if (groupMembers is None):
                 abort(400, "User is not in a group")
-            group = session.query(db.Group).filter_by(id=groupMember.group_id).first()
+            found = 0
+            for groupMember in groupMembers:
+                group = session.query(db.Group).filter_by(id=groupMember.group_id).first()
+                if (group.assignment_id == assignment.id):
+                    found = 1
+                    break
             session.close()
+            if (found == 0):
+                return None
             return {
                 'chat_room_id': group.group_chatroom_id
             }

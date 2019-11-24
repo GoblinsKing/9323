@@ -19,9 +19,13 @@ def unpack(j, *args, **kargs):
     return r
 
 def getMessageInfo(raw):
+    session = db.get_session()
+    user = session.query(db.User).filter_by(id=raw.user_id).first()
+    session.close()
     return {
             "id": raw.id,
             'user_id': raw.user_id,
+            'user_name': user.name,
             'message': raw.message
     }
 
