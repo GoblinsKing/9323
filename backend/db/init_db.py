@@ -2,6 +2,7 @@ from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
+import hashlib
 
 engine = create_engine('sqlite:///db/dataBase.db?check_same_thread=False', echo = True)
 Base = declarative_base()
@@ -15,7 +16,8 @@ class User(Base):
                         Column('token', VARCHAR(64)),
                         Column('role', VARCHAR(10)),
                         Column('name', VARCHAR(20)),
-                        Column('email', VARCHAR(20)))
+                        Column('email', VARCHAR(20)),
+                        Column('salt', VARCHAR(64)))
 
     def __repr__(self):
         return 'User:\nUsername: %s\nRole: %s' % (self.username, self.role)
@@ -184,7 +186,10 @@ def init_user(session):
     with open('db/users.csv') as f:
         for line in f.readlines():
             line = line.strip().split(',')
-            user = User(zid=line[0], password=line[1], token='', role=line[2], name=line[3], email=line[0]+"@unsw.edu.au")
+            salt = os.urandom(24)
+            password_bytes = line[1].encode()
+            hash_password = hashlib.sha256(salt + password_bytes).hexdigest()
+            user = User(zid=line[0], password=hash_password, token='', role=line[2], name=line[3], email=line[0]+"@unsw.edu.au", salt = salt)
             if (user.role == "admin"):
                 user.token = '123'
             session.add(user)
